@@ -1,0 +1,168 @@
+Name,department_code,department_name,email,employee_id
+Priyanka Gupta,CB,(CB) Chemical and Biochemical Engineering,priyanka@iitp.ac.in,CB001
+Sujoy Kumar Samanta,CB,(CB) Chemical and Biochemical Engineering,sksamanta@iitp.ac.in,CB002
+Nitin Dutt Chaturvedi,CB,(CB) Chemical and Biochemical Engineering,nitind@iitp.ac.in,CB003
+Sandip Khan,CB,(CB) Chemical and Biochemical Engineering,skhan@iitp.ac.in,CB004
+Sushant Kumar,CB,(CB) Chemical and Biochemical Engineering,sushantkumar@iitp.ac.in,CB005
+Jose V Parambil,CB,(CB) Chemical and Biochemical Engineering,josevparambil@iitp.ac.in,CB006
+Anoop Kumar Gupta,CB,(CB) Chemical and Biochemical Engineering,anoopg@iitp.ac.in,CB007
+Atanu Kumar Metya,CB,(CB) Chemical and Biochemical Engineering,atanu.metya@iitp.ac.in,CB008
+Mahendra Ram,CB,(CB) Chemical and Biochemical Engineering,mahendra.cbe@iitp.ac.in,CB009
+Lalita Kanwar Shekhawat,CB,(CB) Chemical and Biochemical Engineering,lalita@iitp.ac.in,CB010
+Ganesh Swain,CB,(CB) Chemical and Biochemical Engineering,ganeshswain24@iitp.ac.in,CB011
+Subrata Hait,CE,(CE) Civil and Environmental Engineering,shait@iitp.ac.in,CE001
+Pradipta Chakrabortty,CE,(CE) Civil and Environmental Engineering,pradipt@iitp.ac.in,CE002
+Syed Khaja Karimullah Hussaini,CE,(CE) Civil and Environmental Engineering,hussaini@iitp.ac.in,CE003
+Avik Samanta,CE,(CE) Civil and Environmental Engineering,asamanta@iitp.ac.in,CE004
+Om Prakash,CE,(CE) Civil and Environmental Engineering,om.prakash@iitp.ac.in,CE005
+Koushik Roy,CE,(CE) Civil and Environmental Engineering,koushik@iitp.ac.in,CE006
+Vaibhav Singhal,CE,(CE) Civil and Environmental Engineering,singhal@iitp.ac.in,CE007
+Amarnath Hegde,CE,(CE) Civil and Environmental Engineering,ahegde@iitp.ac.in,CE008
+Trishikhi Raychoudhury,CE,(CE) Civil and Environmental Engineering,trishikhi@iitp.ac.in,CE009
+Ramakrishna Bag,CE,(CE) Civil and Environmental Engineering,rkbag@iitp.ac.in,CE010
+Vishal Deshpande,CE,(CE) Civil and Environmental Engineering,deshpande@iitp.ac.in,CE011
+Sudhir Varma,CE,(CE) Civil and Environmental Engineering,svarma@iitp.ac.in,CE012
+Anilkumar Bachu,CE,(CE) Civil and Environmental Engineering,anilkumar@iitp.ac.in,CE013
+Arvind Kumar Jha,CE,(CE) Civil and Environmental Engineering,jhaarvind@iitp.ac.in,CE014
+Sourav Gur,CE,(CE) Civil and Environmental Engineering,sgur@iitp.ac.in,CE015
+Trilok Nath Singh,CE,(CE) Civil and Environmental Engineering,director@iitp.ac.in,CE016
+Akshar Tripathi,CE,(CE) Civil and Environmental Engineering,akshar@iitp.ac.in,CE017
+Baadiga Ramu,CE,(CE) Civil and Environmental Engineering,baadigaramu@iitp.ac.in,CE018
+Manoj Kumar Yadav,CE,(CE) Civil and Environmental Engineering,mkyadav@iitp.ac.in,CE019
+Pradhi Rajeev,CE,(CE) Civil and Environmental Engineering,pradhi@iitp.ac.in,CE020
+Amit Kumar Verma,CE,(CE) Civil and Environmental Engineering,akv@iitp.ac.in,CE021
+Neeladri Das,CH,(CH) Department of Chemistry,neeladri@iitp.ac.in,CH001
+Debabrata Seth,CH,(CH) Department of Chemistry,debabrata@iitp.ac.in,CH002
+Amit Kumar,CH,(CH) Department of Chemistry,amitkt@iitp.ac.in,CH003
+Tammineni Rajagopala Rao,CH,(CH) Department of Chemistry,rajgopal@iitp.ac.in,CH004
+Snehasis Daschakraborty,CH,(CH) Department of Chemistry,snehasis@iitp.ac.in,CH005
+Debajit Sarma,CH,(CH) Department of Chemistry,debajit@iitp.ac.in,CH006
+Subrata Chattopadhyay,CH,(CH) Department of Chemistry,sch@iitp.ac.in,CH007
+Sahid Hussain,CH,(CH) Department of Chemistry,sahid@iitp.ac.in,CH008
+Md Lokman Hakim Choudhury,CH,(CH) Department of Chemistry,lokman@iitp.ac.in,CH009
+Jagadish Das,CH,(CH) Department of Chemistry,jdas@iitp.ac.in,CH010
+Rajendra Kumar Konidena,CH,(CH) Department of Chemistry,rajsan@iitp.ac.in,CH011
+Prolay Das,CH,(CH) Department of Chemistry,prolay@iitp.ac.in,CH012
+Ranganathan Subramanian,CH,(CH) Department of Chemistry,ranga@iitp.ac.in,CH013
+Picoutreach,CH,(CH) Department of Chemistry,pic_outreach@iitp.ac.in,CH014
+Pradeepika Verma,CS,(CS)Computer Science and Engineering,faculty.tih@iitp.ac.in,CS001
+Arijit Mondal,CS,(CS)Computer Science and Engineering,arijit@iitp.ac.in,CS002
+Raju Halder,CS,(CS)Computer Science and Engineering,halder@iitp.ac.in,CS003
+Joydeep Chandra,CS,(CS)Computer Science and Engineering,joydeep@iitp.ac.in,CS004
+Abyayananda Maiti,CS,(CS)Computer Science and Engineering,abyaym@iitp.ac.in,CS005
+Suman Kumar Maji,CS,(CS)Computer Science and Engineering,smaji@iitp.ac.in,CS006
+Jimson Mathew,CS,(CS)Computer Science and Engineering,jimson@iitp.ac.in,CS007
+Sourav Kumar Dandapat,CS,(CS)Computer Science and Engineering,sourav@iitp.ac.in,CS008
+Somanath Tripathy,CS,(CS)Computer Science and Engineering,som@iitp.ac.in,CS009
+Mayank Agarwal,CS,(CS)Computer Science and Engineering,mayank265@iitp.ac.in,CS010
+Rajiv Misra,CS,(CS)Computer Science and Engineering,rajivm@iitp.ac.in,CS011
+Chandranath Adak,CS,(CS)Computer Science and Engineering,chandranath@iitp.ac.in,CS012
+Satendra Kumar,CS,(CS)Computer Science and Engineering,satendra@iitp.ac.in,CS013
+Arijit Roy,CS,(CS)Computer Science and Engineering,arijitroy@iitp.ac.in,CS014
+Rishav Singh,CS,(CS)Computer Science and Engineering,rishav.singh@iitp.ac.in,CS015
+Rahul Mishra,CS,(CS)Computer Science and Engineering,rahul_mishra@iitp.ac.in,CS016
+Samrat Mondal,CS,(CS)Computer Science and Engineering,samrat@iitp.ac.in,CS017
+Sriparna Saha,CS,(CS)Computer Science and Engineering,sriparna@iitp.ac.in,CS018
+Asif Ekbal,CS,(CS)Computer Science and Engineering,asif@iitp.ac.in,CS019
+Picauto,CS,(CS)Computer Science and Engineering,pic_auto@iitp.ac.in,CS020
+Tarakanath Kobaku,EE,(EE) Electrical and Electronics Engineering,tarak@iitp.ac.in,EE001
+Sudhan Majhi,EE,(EE) Electrical and Electronics Engineering,smajhi@iitp.ac.in,EE002
+S Sivasubramani,EE,(EE) Electrical and Electronics Engineering,siva@iitp.ac.in,EE003
+Rajib Kumar Jha,EE,(EE) Electrical and Electronics Engineering,jharajib@iitp.ac.in,EE004
+Sanjoy Kumar Parida,EE,(EE) Electrical and Electronics Engineering,skparida@iitp.ac.in,EE005
+Saurabh Kumar Pandey,EE,(EE) Electrical and Electronics Engineering,saurabh@iitp.ac.in,EE006
+Pramod  Kumar Tiwari,EE,(EE) Electrical and Electronics Engineering,pktiwari@iitp.ac.in,EE007
+Sudhir Kumar,EE,(EE) Electrical and Electronics Engineering,sudhir@iitp.ac.in,EE008
+Jawar Singh,EE,(EE) Electrical and Electronics Engineering,jawar@iitp.ac.in,EE009
+Preetam Kumar,EE,(EE) Electrical and Electronics Engineering,pkumar@iitp.ac.in,EE010
+Udit Satija,EE,(EE) Electrical and Electronics Engineering,udit@iitp.ac.in,EE011
+Amit Kumar Singh,EE,(EE) Electrical and Electronics Engineering,amitks@iitp.ac.in,EE012
+Somanath Pradhan,EE,(EE) Electrical and Electronics Engineering,pradhans@iitp.ac.in,EE013
+Suraj Suman,EE,(EE) Electrical and Electronics Engineering,ssu@iitp.ac.in,EE014
+Jagannath Malik,EE,(EE) Electrical and Electronics Engineering,malik@iitp.ac.in,EE015
+Bussa Vinod Kumar,EE,(EE) Electrical and Electronics Engineering,vinod.bussa@iitp.ac.in,EE016
+Ahmad Ali,EE,(EE) Electrical and Electronics Engineering,ali@iitp.ac.in,EE017
+Abhinoy Kumar Singh,EE,(EE) Electrical and Electronics Engineering,abhinoy.singh@iitp.ac.in,EE018
+Avneet Kumar,EE,(EE) Electrical and Electronics Engineering,akumar@iitp.ac.in,EE019
+Ranjan Kumar Behera,EE,(EE) Electrical and Electronics Engineering,rkb@iitp.ac.in,EE020
+Shovan Bhaumik,EE,(EE) Electrical and Electronics Engineering,shovan.bhaumik@iitp.ac.in,EE021
+Sumanta Gupta,EE,(EE) Electrical and Electronics Engineering,sumanta@iitp.ac.in,EE022
+Kailash Chandra Ray,EE,(EE) Electrical and Electronics Engineering,kcr@iitp.ac.in,EE023
+Yatendra Kumar Singh,EE,(EE) Electrical and Electronics Engineering,yatendra@iitp.ac.in,EE024
+Papia Raj,HS,(HS) Humanities and Social Sciences,praj@iitp.ac.in,HS001
+Priyanka Tripathi,HS,(HS) Humanities and Social Sciences,priyankatripathi@iitp.ac.in,HS002
+Dr Sweta Sinha,HS,(HS) Humanities and Social Sciences,sweta@iitp.ac.in,HS003
+Nalin Bharti,HS,(HS) Humanities and Social Sciences,nalinbharti@iitp.ac.in,HS004
+Richa Chaudhary,HS,(HS) Humanities and Social Sciences,richa.chaudhary@iitp.ac.in,HS005
+Smriti Singh,HS,(HS) Humanities and Social Sciences,smriti@iitp.ac.in,HS006
+Meghna Dutta,HS,(HS) Humanities and Social Sciences,meghna@iitp.ac.in,HS007
+Rajendra Narayan Paramanik,HS,(HS) Humanities and Social Sciences,rajendra@iitp.ac.in,HS008
+Aditya Raj,HS,(HS) Humanities and Social Sciences,aditya.raj@iitp.ac.in,HS009
+Dr Om Prakash,MA,(MA) Department of Mathematics,om@iitp.ac.in,MA001
+Prashant Kumar Srivastava,MA,(MA) Department of Mathematics,pksri@iitp.ac.in,MA002
+Amit Kumar Verma,MA,(MA) Department of Mathematics,akverma@iitp.ac.in,MA003
+Nutan Kumar Tomar,MA,(MA) Department of Mathematics,nktomar@iitp.ac.in,MA004
+Subhabrata Paul,MA,(MA) Department of Mathematics,subhabrata@iitp.ac.in,MA005
+Shailesh Kumar Tiwari,MA,(MA) Department of Mathematics,sktiwari@iitp.ac.in,MA006
+Rahul Kumar Singh,MA,(MA) Department of Mathematics,rahulks@iitp.ac.in,MA007
+Kuldip Singh Patel,MA,(MA) Department of Mathematics,kspatel@iitp.ac.in,MA008
+Yogesh Mani Tripathi,MA,(MA) Department of Mathematics,yogesh@iitp.ac.in,MA009
+Sushmitha P,MA,(MA) Department of Mathematics,sushmitha@iitp.ac.in,MA010
+Daya Sagar Gupta,MA,(MA) Department of Mathematics,dayasagar@iitp.ac.in,MA011
+Ashish Kumar Upadhyay,MC,(MC) Maths & Computing,upadhyay@iitp.ac.in,MC001
+Pratibhamoy Das,MC,(MC) Maths & Computing,pratibhamoy@iitp.ac.in,MC002
+Balendu Bhooshan Upadhyay,MC,(MC) Maths & Computing,bhooshan@iitp.ac.in,MC003
+Dr Kumari Saloni,MC,(MC) Maths & Computing,ksaloni@iitp.ac.in,MC004
+Karali Patra,ME,(ME) Mechanical Engineering,kpatra@iitp.ac.in,ME001
+Atul Thakur,ME,(ME) Mechanical Engineering,athakur@iitp.ac.in,ME002
+Rishi Raj,ME,(ME) Mechanical Engineering,rraj@iitp.ac.in,ME003
+Mayank Tiwari,ME,(ME) Mechanical Engineering,mayankt@iitp.ac.in,ME004
+Akhilendra Singh,ME,(ME) Mechanical Engineering,akhil@iitp.ac.in,ME005
+Chiranjit Sarkar,ME,(ME) Mechanical Engineering,csarkar@iitp.ac.in,ME006
+Anirban Bhattacharya,ME,(ME) Mechanical Engineering,abhatta@iitp.ac.in,ME007
+Mohd Kaleem Khan,ME,(ME) Mechanical Engineering,mkkhan@iitp.ac.in,ME008
+Anirban Mahato,ME,(ME) Mechanical Engineering,mahato@iitp.ac.in,ME009
+Murshid Imam,ME,(ME) Mechanical Engineering,murshid@iitp.ac.in,ME010
+Deepu P,ME,(ME) Mechanical Engineering,deepu@iitp.ac.in,ME011
+Surajit Kumar Paul,ME,(ME) Mechanical Engineering,surajit@iitp.ac.in,ME012
+Subrata Kumar,ME,(ME) Mechanical Engineering,subrata@iitp.ac.in,ME013
+Abhishek Raj,ME,(ME) Mechanical Engineering,araj@iitp.ac.in,ME014
+Ashwani Assam,ME,(ME) Mechanical Engineering,aashwani@iitp.ac.in,ME015
+Sudhansu Sekhar Panda,ME,(ME) Mechanical Engineering,sspanda@iitp.ac.in,ME016
+Chetankumar Pratapbhai Patel,ME,(ME) Mechanical Engineering,chetan@iitp.ac.in,ME017
+Ajay Kumar Yadav,ME,(ME) Mechanical Engineering,ajay_me@iitp.ac.in,ME018
+Manabendra Pathak,ME,(ME) Mechanical Engineering,mpathak@iitp.ac.in,ME019
+Sunil Kumar Singh,ME,(ME) Mechanical Engineering,sunils@iitp.ac.in,ME020
+Somnath Sarangi,ME,(ME) Mechanical Engineering,somsara@iitp.ac.in,ME021
+Probir Saha,ME,(ME) Mechanical Engineering,psaha@iitp.ac.in,ME022
+Anirban Chowdhury,MM,(MM) Metallurgical and Materials Engineering,anirc@iitp.ac.in,MM001
+Dinesh Kumar Kotnees,MM,(MM) Metallurgical and Materials Engineering,dinesh@iitp.ac.in,MM002
+Anup Kumar Keshri,MM,(MM) Metallurgical and Materials Engineering,anup@iitp.ac.in,MM003
+Tamoghna Chakrabarti,MM,(MM) Metallurgical and Materials Engineering,tamoghna@iitp.ac.in,MM004
+Devinder Yadav,MM,(MM) Metallurgical and Materials Engineering,devinder@iitp.ac.in,MM005
+Ajay Kumar Kalyani,MM,(MM) Metallurgical and Materials Engineering,ajay.kalyani@iitp.ac.in,MM006
+Bharat Bhushan,MM,(MM) Metallurgical and Materials Engineering,bhushan@iitp.ac.in,MM007
+Sandan Kumar Sharma,MM,(MM) Metallurgical and Materials Engineering,sandansharma07@iitp.ac.in,MM008
+Manish Singh,MM,(MM) Metallurgical and Materials Engineering,manish.singh@iitp.ac.in,MM009
+Bb Agrawal,MM,(MM) Metallurgical and Materials Engineering,bbag@iitp.ac.in,MM010
+Om Prakash Sinha,MM,(MM) Metallurgical and Materials Engineering,opsinha.met@iitp.ac.in,MM011
+Ajay Thakur,PH,(PH) Engineering Physics,ajay.thakur@iitp.ac.in,PH001
+Manoranjan Kar,PH,(PH) Engineering Physics,mano@iitp.ac.in,PH002
+Venkata Ramanaiah Dantham,PH,(PH) Engineering Physics,dantham@iitp.ac.in,PH003
+Ayash Kanto Mukherjee,PH,(PH) Engineering Physics,akm@iitp.ac.in,PH004
+Raghavan K  Easwaran,PH,(PH) Engineering Physics,raghavanke@iitp.ac.in,PH005
+Jobin Jose,PH,(PH) Engineering Physics,jobin.jose@iitp.ac.in,PH006
+Manas Kumar Sarangi,PH,(PH) Engineering Physics,mksarangi@iitp.ac.in,PH007
+Alpana Nayak,PH,(PH) Engineering Physics,anayak@iitp.ac.in,PH008
+Soumya Jyoti Ray,PH,(PH) Engineering Physics,ray@iitp.ac.in,PH009
+Neha Kiritkumar Shah,PH,(PH) Engineering Physics,nehashah@iitp.ac.in,PH010
+Prakash Parida,PH,(PH) Engineering Physics,pparida@iitp.ac.in,PH011
+Arghya Choudhury,PH,(PH) Engineering Physics,arghya@iitp.ac.in,PH012
+Chandra Shekhar Prajapati,PH,(PH) Engineering Physics,shekhar@iitp.ac.in,PH013
+Sandeep Aashish,PH,(PH) Engineering Physics,aashish@iitp.ac.in,PH014
+Gaurav Kumar Tomar,PH,(PH) Engineering Physics,tomar@iitp.ac.in,PH015
+Akash Singh,PH,(PH) Engineering Physics,akashsingh@iitp.ac.in,PH016
+Shivangi Shree,PH,(PH) Engineering Physics,sshree@iitp.ac.in,PH017
+Utpal Roy,PH,(PH) Engineering Physics,uroy@iitp.ac.in,PH018
+Awalendra Kumar Thakur,PH,(PH) Engineering Physics,akt@iitp.ac.in,PH019
+Naveen Kumar Nishchal,PH,(PH) Engineering Physics,nkn@iitp.ac.in,PH020

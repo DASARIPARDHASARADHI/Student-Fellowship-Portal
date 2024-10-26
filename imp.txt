@@ -1,0 +1,850 @@
+student -> Department, Faculty, Username Store cheyyali
+
+Faculty Info Table
+
+
+fac adv prev code
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faculty Advisor</title>
+    <link rel="icon" href="images/iitp_symbol.png" type="image/png">
+    <style>
+        div.header {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+
+            background-color: #1f94ca;
+
+        }
+
+        body {
+            margin: 0;
+        }
+
+        ul.navbar {
+            list-style-type: none;
+            width: 150px;
+            height: 500px;
+            padding: 0;
+            margin: 0;
+            background-color: #0a5375;
+            border-top: solid 1px #042f42;
+        }
+
+        li {
+            padding: 8px 12px;
+            text-align: center;
+            background-color: #0a5375;
+            font-size: large;
+        }
+
+
+        li a {
+            color: rgb(255, 255, 255);
+            text-decoration: none;
+            display: block;
+        }
+
+        /* li.current {
+
+            padding: 8px 12px;
+            text-align: center;
+            background-color: #1192ce;
+
+            border-bottom: solid rgb(9, 98, 158);
+
+        } */
+
+        li:hover,
+        li:active {
+            padding: 8px 12px;
+            text-align: center;
+            background-color: #1192ce;
+        }
+
+        #main {
+            display: flex;
+            overflow: auto;
+        }
+
+        #status_table {
+            display: flex;
+            border: solid 1px;
+            width: 100%;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        table {
+            border: solid black 1px;
+            border-collapse: collapse;
+            width: 500px;
+
+        }
+
+        tr:nth-child(even) {
+            background-color: #88c7e4;
+        }
+
+        th,
+        td {
+            border: solid black 1px;
+            text-align: center;
+            padding: 10px;
+        }
+
+        /*Status Bar*/
+        ul.status {
+
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            background-color: #0a5375;
+
+        }
+
+        ul.status li {
+            display: inline-block;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <div style="align-self: center; margin:5px; width: 100px;">
+            <img style="height: 90px; width: 90px;" src="images/iitp_symbol.png">
+        </div>
+
+        <div style="width: 100%; margin-left: 100px; text-align: center;">
+            <h1 style="font-size: 35px; color: white;">Student Fellowship Portal</h1>
+        </div>
+
+    </div>
+
+    <div id="main">
+        <div>
+            <ul class="navbar">
+                <li><a href="start.html"> Profile</a></li>
+                <li class="current"><a href="start.html"> Students</a></li>
+                <li><a href="start.html"> Logout</a></li>
+                <hr>
+            </ul>
+
+        </div>
+
+        <div id="status_table">
+            <div>
+                <h2>Welcome Name!</h2>
+            </div>
+            <div style="text-align: center; margin-top: 0px;">
+
+                <h1>Applications</h1>
+
+            </div>
+            <div>
+                <ul class="status">
+                    <li><a href="start.html" style="display: block;">All</a></li>
+                    <li><a href="start.html" style="display: block;">Pending</a></li>
+                    <li><a href="start.html" style="display: block;">Approved</a></li>
+                    <li><a href="start.html" style="display: block;">Rejected</a></li>
+                </ul>
+            </div>
+
+            <div style="overflow-x: auto; margin-top: 10px;">
+                <table id="t4">
+                    <tr>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Value</th>
+                        <th>Value</th>
+                        <th>Value</th>
+                        <th>Value</th>
+                        <th>Value</th>
+                        <th>Value</th>
+                        <th>Value</th>
+                        <th>Value</th>
+                        <th>Value</th>
+                        <th>Approve</th>
+                    </tr>
+                    <tr>
+                        <td>Pardhu</td>
+                        <td>Dasari</td>
+                        <td>50</td>
+                        <td>50</td>
+                        <td>50</td>
+                        <td>50</td>
+                        <td>50</td>
+                        <td>50</td>
+                        <td>50</td>
+                        <td>50</td>
+                        <td>50</td>
+                        <td>
+                            <form>
+
+                                <input type="radio" id="yes" name="approve">
+                                <label for="yes">Yes</label>
+
+                                <input type="radio" id="no" name="approve">
+                                <label for="no">No</label>
+
+                            </form>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Pardhu</td>
+                        <td>Dasari</td>
+                        <td>50</td>
+                        <td>50</td>
+                        <td>50</td>
+                        <td>50</td>
+                        <td>50</td>
+                        <td>50</td>
+                        <td>50</td>
+                        <td>50</td>
+                        <td>50</td>
+                        <td>50</td>
+                    </tr>
+                    <tr>
+                        <td>Pardhu</td>
+                        <td>Dasari</td>
+                        <td>50</td>
+                        <td>50</td>
+                        <td>50</td>
+                        <td>50</td>
+                        <td>50</td>
+                        <td>50</td>
+                        <td>50</td>
+                        <td>50</td>
+                        <td>50</td>
+                        <td>50</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+
+
+
+
+<?php
+// Database configuration
+$servername = "localhost";
+$username = "root";
+$password = "pardhu14225"; // Update to your MySQL password
+$dbname = "fellowship_portal";
+
+// Create a connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check the connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Fetch data for HOD: Only students approved by the faculty advisor
+$filter = isset($_GET['filter']) ? $_GET['filter'] : 'all';
+
+// Define the query based on the filter for approved students only
+switch ($filter) {
+    case 'approved':
+        $query = "SELECT * FROM students WHERE appr_by_fac_adv = 'YES' AND appr_by_hod IS NOT NULL";
+        break;
+    case 'pending':
+        $query = "SELECT * FROM students WHERE appr_by_fac_adv = 'YES' AND appr_by_hod = 'NO'";
+        break;
+    case 'rejected':
+        $query = "SELECT * FROM students WHERE appr_by_fac_adv = 'YES' AND appr_by_hod = 'REJECTED'";
+        break;
+    default:
+        $query = "SELECT * FROM students WHERE appr_by_fac_adv = 'YES'";
+}
+
+// Fetch approved students' data for HOD
+$result = $conn->query($query);
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Head of Department</title>
+    <link rel="icon" href="images/iitp_symbol.png" type="image/png">
+
+    <style>
+        div.header {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            background-color: #1f94ca;
+        }
+
+        body {
+            margin: 0;
+        }
+
+        ul.navbar {
+            list-style-type: none;
+            width: 150px;
+            height: 900px;
+            padding: 0;
+            margin: 0;
+            background-color: #0a5375;
+            border-top: solid 1px #042f42;
+        }
+
+        li {
+            padding: 8px 12px;
+            text-align: center;
+            background-color: #0a5375;
+            font-size: large;
+        }
+
+        li a {
+            color: rgb(255, 255, 255);
+            text-decoration: none;
+            display: block;
+        }
+
+        li:hover,
+        li:active {
+            padding: 8px 12px;
+            text-align: center;
+            background-color: #1192ce;
+        }
+
+        #main {
+            display: flex;
+            overflow: auto;
+        }
+
+        #status_table {
+            display: flex;
+            border: solid 1px;
+            width: 100%;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        table {
+            border: solid black 1px;
+            border-collapse: collapse;
+            width: 500px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #88c7e4;
+        }
+
+        th,
+        td {
+            border: solid black 1px;
+            text-align: center;
+            padding: 10px;
+        }
+
+        ul.status {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            background-color: #0a5375;
+        }
+
+        ul.status li {
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        ul.status li a {
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+        }
+
+        ul.status li.active {
+            background-color: #1f94ca;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="header">
+        <div style="align-self: center; margin:5px; width: 100px;">
+            <img style="height: 90px; width: 90px;" src="images/iitp_symbol.png">
+        </div>
+        <div style="width: 100%; margin-left: 100px; text-align: center;">
+            <h1 style="font-size: 35px; color: white;">Student Fellowship Portal</h1>
+        </div>
+    </div>
+
+    <div id="main">
+        <div>
+            <ul class="navbar">
+                <li><a href="hod_profile.php">Profile</a></li>
+                <li class="current"><a href="hod.php">Students</a></li>
+                <li><a href="logout.php">Logout</a></li>
+                <hr>
+            </ul>
+        </div>
+
+        <div id="status_table">
+            <div>
+                <h2>Welcome, HOD!</h2>
+            </div>
+            <div style="text-align: center; margin-top: 0px;">
+                <h1>Applications</h1>
+            </div>
+            <div>
+                <ul class="status">
+                    <li id="all"><a href="hod.php?filter=all">All</a></li>
+                    <li id="pending"><a href="hod.php?filter=pending">Pending</a></li>
+                    <li id="approved"><a href="hod.php?filter=approved">Approved</a></li>
+                    <li id="rejected"><a href="hod.php?filter=rejected">Rejected</a></li>
+                </ul>
+
+                <script>
+                    const currentFilter = "<?php echo $filter; ?>";
+                    const statusLinks = document.querySelectorAll('ul.status li');
+                    statusLinks.forEach(link => {
+                        const filterId = link.id;
+                        if (filterId === currentFilter) {
+                            link.classList.add('active');
+                        }
+                    });
+                </script>
+            </div>
+
+            <div style="overflow-x: auto; margin: 10px;">
+                <table id="t4">
+                    <tr>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Gender</th>
+                        <th>Roll No</th>
+                        <th>Webmail</th>
+                        <th>Year</th>
+                        <th>Course</th>
+                        <th>Department</th>
+                        <th>Guide</th>
+                        <th>Account</th>
+                        <th>Bank</th>
+                        <th>IFSC</th>
+                        <th>DOJ</th>
+                        <th>Remarks</th>
+                        <th>Approve</th>
+                    </tr>
+                    <?php while ($row = $result->fetch_assoc()) { ?>
+                        <tr>
+                            <td><?php echo $row['fname']; ?></td>
+                            <td><?php echo $row['lname']; ?></td>
+                            <td><?php echo $row['gender']; ?></td>
+                            <td><?php echo $row['rollno']; ?></td>
+                            <td><?php echo $row['webmail']; ?></td>
+                            <td><?php echo $row['year']; ?></td>
+                            <td><?php echo $row['course']; ?></td>
+                            <td><?php echo $row['department']; ?></td>
+                            <td><?php echo $row['employee_name']; ?></td>
+                            <td><?php echo $row['account']; ?></td>
+                            <td><?php echo $row['bank']; ?></td>
+                            <td><?php echo $row['ifsc']; ?></td>
+                            <td><?php echo $row['doj']; ?></td>
+                            <td><?php echo $row['remarks']; ?></td>
+                            <td>
+                                <form method="POST" action="hod_approve.php">
+                                    <input type="hidden" name="student_id" value="<?php echo $row['id']; ?>">
+                                    <input type="radio" id="approve_yes_<?php echo $row['id']; ?>" name="approve" value="YES">
+                                    <label for="approve_yes_<?php echo $row['id']; ?>">Yes</label>
+                                    <input type="radio" id="approve_no_<?php echo $row['id']; ?>" name="approve" value="REJECTED">
+                                    <label for="approve_no_<?php echo $row['id']; ?>">No</label>
+                                    <button type="submit">Submit</button>
+                                </form>
+                            </td>
+                        </tr>
+                    <?php } ?>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+
+<?php
+$conn->close();
+?>
+
+
+1) After HOD login, based on his/her department that department student only should show and those students should be approved by Faculty Advisor previously
+
+that is for a student, in "students" table if he/she has "appr_by_fac_adv = YES" then only that student information should be shown to that Department's HOD
+
+2) Remarks given by Faculty Advisor should also be displayed, you can get it from "fac_adv_remarks" in students table only
+ 
+   And we should have option to write the remarks for the HOD also, and those remarks by HOD should be stored in "hod_remarks" in students table only
+
+3) After HOD's approval or rejection those details should be reflected in "appr_by_hod" in students table only
+
+4) Create a drop down menu with two options Phd and MTech in list item of Students and you have to sort the students based on their "course" column in students table which has values "phd" and "mtech".
+
+5) HOD's name should displayed in the place of Name text, based on his/her name in "employees" table in column "name"
+
+6) Please note I have added a bar which shows 4 options All, Pending, Approved, Rejected
+   Add a functionality such that (based on "appr_by_hod" in students table)
+   i) All students details should come in All
+   ii) Pending Students details(who are just registered) should come in Pending ("appr_by_hod" = NO)
+   iii) Approved Students details ("appr_by_hod" = YES) 
+   iv) Rejected Students details ("appr_by_hod" = REJECTED)
+
+
+
+
+
+Please Implement these functionalities in the above code (file name is student_profile.php)
+
+1) The below 4 fields should fetch from the table named "students"
+
+Approval of Office Order -> from column "office_order"
+
+Date of Office Order -> from column "doo"
+
+Approval of Enhancement -> from column "enhancement"
+
+Date of Enhancement -> from column "doe"
+
+All these 4 fields should be read only.
+
+
+2) The "Select Amount" should be in our control means
+if "course" is "mtech" then value of "Select Amount" = Rs.12,000
+if "course" is "phd" and "enhancement" = "YES" then value of "Select Amount" = Rs.42,000
+if "course" is "phd" and "enhancement" = "NO" then value of "Select Amount" = Rs.37,000
+
+Based on these 3 conditions the field should automatically fill and this field should readonly
+
+
+3) These 3 fields should be submitted and should store when we click "Claim" Button
+(database name is "fellowship_portal" and table name is "students")
+
+Claimed Month: -> in cloumn "claimed_month"
+
+Select Amount -> in cloumn "claimed_amount"
+
+Claim for Approval -> in cloumn "claimed"
+
+After Clicking "Claim" button, the claim button should be disappeared 
+and should display the text "You Claimed for the Month" [Month value should be "claimed_month" from the database]
+and all the fields should be "readonly" (i.e, After Clicking claim button)
+
+create a new page which store these 3 fields after clicking "Claim" Button
+
+
+student_profile.php [previous code]
+
+<?php
+// Start the session to track login
+session_start();
+
+// Database configuration
+$servername = "localhost";
+$username = "root";
+$password = "pardhu14225";
+$dbname = "fellowship_portal";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Check if the user is logged in, otherwise redirect to login page
+if (!isset($_SESSION['logged_in_user'])) {
+    header("Location: stud_login.php");
+    exit();
+}
+
+// Fetch student details based on logged-in username
+$uname = $_SESSION['logged_in_user'];
+
+$stmt = $conn->prepare("SELECT * FROM students WHERE username = ?");
+$stmt->bind_param("s", $uname);
+$stmt->execute();
+$result = $stmt->get_result();
+$student = $result->fetch_assoc();
+
+$stmt->close();
+$conn->close();
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Profile</title>
+    <link rel="icon" href="iitp_symbol.png" type="image/png">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            background-color: #1f94ca;
+            padding: 10px;
+        }
+
+        .header img {
+            height: 70px;
+            width: 70px;
+        }
+
+        .header h1 {
+            color: white;
+            margin-left: 20px;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        .student-details {
+            max-width: 800px;
+            margin: auto;
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .student-details h2 {
+            text-align: center;
+            color: #1f94ca;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+
+        .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+
+        .logout {
+            text-align: center;
+            margin-top: 80px;
+        }
+
+        .logout a {
+            padding: 10px 20px;
+            background-color: #1f94ca;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+
+        .logout a:hover {
+            background-color: #0d7ba5;
+        }
+
+        .claim {
+            margin-top: 30px;
+
+        }
+
+        .claim a {
+
+            padding: 10px 30px;
+            text-align: center;
+
+            background-color: #0d8c2f;
+            color: white;
+
+            border-radius: 4px;
+            text-decoration: none;
+            border: 2px;
+        }
+
+        .claim a:hover {
+            background-color: #0b6e25;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <img src="iitp_symbol.png" alt="Logo">
+        <h1>Student Fellowship Portal</h1>
+    </div>
+
+    <div class="container">
+        <div class="student-details">
+            <h2>Welcome, <?php echo $student['fname'] . ' ' . $student['lname']; ?>!</h2>
+            <form action="update_profile.php" method="POST">
+                <div class="form-group">
+                    <label for="rollno">Roll Number</label>
+                    <input type="text" id="rollno" name="rollno" value="<?php echo $student['rollno']; ?>" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="webmail">Webmail</label>
+                    <input type="text" id="webmail" name="webmail" value="<?php echo $student['webmail']; ?>" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="year">Year</label>
+                    <input type="text" id="year" name="year" value="<?php echo $student['year']; ?>" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="course">Course</label>
+                    <input type="text" id="course" name="course" value="<?php echo $student['course']; ?>" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="department">Department</label>
+                    <input type="text" id="department" name="department" value="<?php echo $student['department']; ?>" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="employee_name">Supervisor</label>
+                    <input type="text" id="employee_name" name="employee_name" value="<?php echo $student['employee_name']; ?>" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="account">Bank Account</label>
+                    <input type="text" id="account" name="account" value="<?php echo $student['account']; ?>" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="bank">Bank</label>
+                    <input type="text" id="bank" name="bank" value="<?php echo $student['bank']; ?>" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="ifsc">IFSC Code</label>
+                    <input type="text" id="ifsc" name="ifsc" value="<?php echo $student['ifsc']; ?>" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="doj">Date of Joining</label>
+                    <input type="text" id="doj" name="doj" value="<?php echo $student['doj']; ?>" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label for="office_order">Approval of Office Order </label>
+                    <select id="office_order" name="office_order" value="<?php echo $student['office_order']; ?>">
+                        <option value="YES">Yes</option>
+                        <option value="NO">No</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="doo">Date of Office Order</label>
+                    <input type="date" id="doo" name="doo" title="Select date" value="<?php echo $student['doo']; ?>">
+                </div>
+
+                <div class="form-group">
+                    <label for="enhancement">Approval of Enhancement </label>
+                    <select id="enhancement" name="enhancement" value="<?php echo $student['enhancement']; ?>">
+                        <option value="YES">Yes</option>
+                        <option value="NO">No</option>
+                    </select>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="doe">Date of Enhancement</label>
+                    <input type="date" id="doe" name="doe" title="Select date" value="<?php echo $student['doe']; ?>">
+                </div>
+
+
+                <h2 style="color:brown">Claim The Fellowship</h3>
+                    <div class="form-group">
+                        <label for="claimed_month">Claimed Month:</label>
+                        <select id="claimed_month" name="claimed_month">
+                            <option value="">--Select Month--</option>
+                            <option value="January">January</option>
+                            <option value="February">February</option>
+                            <option value="March">March</option>
+                            <option value="April">April</option>
+                            <option value="May">May</option>
+                            <option value="June">June</option>
+                            <option value="July">July</option>
+                            <option value="August">August</option>
+                            <option value="September">September</option>
+                            <option value="October">October</option>
+                            <option value="November">November</option>
+                            <option value="December">December</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="claimed_amount">Select Amount</label>
+                        <select id="claimed_amount" name="claimed_amount">
+                            <option value="">--Select Amount--</option>
+                            <option value="42,000">Rs.42,000</option>
+                            <option value="37,000">Rs.37,000</option>
+                            <option value="12,000">Rs.12,000</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="claimed">Claim for Approval</label>
+                        <select id="claimed" name="claimed">
+                            <option value="YES">Yes</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="absent_days">Number of Absent Days</label>
+                        <input type="number" id="absent_days" name="absent_days" value="<?php echo $student['absent_days']; ?>" disabled>
+                    </div>
+
+                    <!-- <div class="form-group">
+                        <label for="remarks">Remarks</label>
+                        <textarea id="remarks" name="remarks" readonly>Enter your remarks</textarea>
+                    </div> -->
+
+                    <div class="claim">
+                        <a href="stud_logout.php" onclick="return confirm('Are you sure to submit your claim?')">Claim</a>
+                    </div>
+
+                    <div class="logout">
+                        <a href="student.php">Go Back to Home</a>
+                    </div>
+            </form>
+        </div>
+    </div>
+
+</body>
+
+</html>
