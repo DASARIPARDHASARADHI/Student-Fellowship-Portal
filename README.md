@@ -1,7 +1,7 @@
-#Student Fellowship Portal
+# Student Fellowship Portal
 
 
-#Description 
+Description
 I have used HTML/CSS/Java Script for Frontend, PHP for Server & MySQL for Database 
 
 
