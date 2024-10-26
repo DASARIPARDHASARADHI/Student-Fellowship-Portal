@@ -1,9 +1,9 @@
 # Student Fellowship Portal
 
 
-Description
-I have used HTML/CSS/Java Script for Frontend, PHP for Server & MySQL for Database 
+Description:
 
+I have used HTML/CSS/Java Script for Frontend, PHP for Server & MySQL for Database 
 
 This Project includes (Process)
 1) Student Registration 
