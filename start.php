@@ -9,7 +9,7 @@
 
     <style>
         body {
-            background-color: #1f94ca;
+            background-color: rgb(8, 73, 105);
 
             background-repeat: no-repeat;
             margin: 5px;
@@ -30,6 +30,7 @@
             display: block;
 
             margin: 60px auto;
+            border: rgb(190, 202, 207) solid 5px;
 
         }
 
@@ -87,11 +88,11 @@
             text-decoration: none;
 
 
-            background-color: #860880;
+            background-color: rgb(38, 107, 5);
             color: white;
 
-            border-radius: 3px;
-            border: solid #860880 2px;
+            border: rgb(211, 222, 228) solid 2px;
+
 
         }
 
@@ -100,9 +101,9 @@
 
             padding: 11px 19px;
 
-            border: solid #5e0459 2px;
+            border: rgb(211, 222, 228) solid 2px;
 
-            background-color: #5e0459;
+            background-color: rgb(13, 121, 148);
 
 
 
@@ -141,10 +142,11 @@
         <div id="main">
             <div>
                 <ul>
-                    <li><a href="stud_login.php" target="_blank"> Student</a></li>
-                    <li><a href="fac_adv_login.php" target="_blank"> Faculty</a></li>
-                    <li><a href="hod_login.php" target="_blank"> HOD</a></li>
-                    <li><a href="start.php" target="_blank"> Administration</a></li>
+                    <li><a href="\Student\stud_register.php" target="_blank"> Student</a></li>
+                    <!-- <li><a href="\Supervisor\supervisor_login.php" target="_blank"> Supervisor</a></li> -->
+                    <li><a href="\Faculty_Advisor\fac_adv_login.php" target="_blank"> Faculty</a></li>
+                    <li><a href="\HOD\hod_login.php" target="_blank"> HOD</a></li>
+                    <li><a href="\Department_Office\dept_offc_login.php" target="_blank"> Department Office</a></li>
 
                 </ul>
             </div>
