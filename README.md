@@ -1,6 +1,6 @@
 # Student Fellowship Portal
 
 
-DASARI PARDHA SARADHI
+Dasari Pardha Saradhi
 
 Roll Number : 2101CS22
