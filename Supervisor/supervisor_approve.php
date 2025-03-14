@@ -13,25 +13,44 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Check if the form is submitted
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $rollno = $conn->real_escape_string($_POST['rollno']); // Use rollno instead of student_id
-    $approve = $conn->real_escape_string($_POST['approval_status']);
-    $remarks = $conn->real_escape_string($_POST['supervisor_remarks']);
+// Check if the form is submitted and validate necessary fields
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['selected_students'], $_POST['approval_status'], $_POST['supervisor_remarks'])) {
+    $selected_students = $_POST['selected_students']; // Array of selected roll numbers
+    $approval_statuses = $_POST['approval_status']; // Array of approval statuses keyed by roll number
+    $remarks = $_POST['supervisor_remarks']; // Array of remarks keyed by roll number
     $approval_time = date("Y-m-d H:i:s"); // Capture the current time as approval time
 
-    // Update the approval status, remarks, and approval time in the students table
-    $sql = "UPDATE students 
-            SET appr_by_supervisor = '$approve', 
-                supervisor_remarks = '$remarks', 
-                supervisor_approv_time = '$approval_time' 
-            WHERE rollno = '$rollno'"; // Use rollno for identification
+    // Prepare the SQL statement for updating each selected student
+    $sql = "UPDATE students SET 
+            appr_by_supervisor = ?, 
+            supervisor_remarks = ?, 
+            supervisor_approv_time = ? 
+            WHERE rollno = ?";
 
-    if ($conn->query($sql) === TRUE) {
-        echo "Approval status, remarks, and approval time updated successfully!";
+    $stmt = $conn->prepare($sql);
+
+    // Check if the statement prepared successfully
+    if ($stmt) {
+        // Loop through selected students and apply updates
+        foreach ($selected_students as $rollno) {
+            $approval = $approval_statuses[$rollno] ?? ''; // Use empty string as fallback
+            $remark = $remarks[$rollno] ?? ''; // Use empty string as fallback
+
+            // Bind and execute statement for each selected student
+            $stmt->bind_param("ssss", $approval, $remark, $approval_time, $rollno);
+            if (!$stmt->execute()) {
+                echo "Error updating record for Roll No $rollno: " . $stmt->error . "<br>";
+            }
+        }
+
+        echo "Selected changes updated successfully!";
     } else {
-        echo "Error: " . $conn->error;
+        echo "Error preparing statement: " . $conn->error;
     }
+
+    $stmt->close();
+} else {
+    echo "No students selected or missing required fields.";
 }
 
 // Close connection

@@ -25,7 +25,7 @@ if ($conn->connect_error) {
 
 // Fetch student details using the session username
 $uname = $_SESSION['logged_in_user'];
-$stmt = $conn->prepare("SELECT fname, lname, application_sent, appr_by_fac_adv, appr_by_hod, amount_appr, amount FROM students WHERE username=?");
+$stmt = $conn->prepare("SELECT fname, lname, application_sent, appr_by_fac_adv, appr_by_dept_offc, appr_by_hod, amount_appr, amount FROM students WHERE webmail=?");
 $stmt->bind_param("s", $uname);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -140,6 +140,7 @@ $conn->close();
             <ul>
                 <li><a href="student_profile.php">Profile</a></li>
                 <li class="current"><a href="student.php">Status</a></li>
+                <li><a href="stud_claims.php">Previous Claims</a></li>
                 <li><a href="stud_logout.php">Logout</a></li>
                 <hr>
             </ul>
@@ -160,15 +161,20 @@ $conn->close();
                         <th>Action</th>
                         <th>Status</th>
                     </tr>
-                    <tr>
+                    <!-- <tr>
                         <td style="width:100px">1.</td>
                         <td>Application Sent</td>
                         <td><?php echo ($student['application_sent'] == 'YES') ? 'Yes' : 'No'; ?></td>
+                    </tr> -->
+                    <tr>
+                        <td style="width:100px">1.</td>
+                        <td>Approved By Faculty Advisor/Supervisor</td>
+                        <td><?php echo ($student['appr_by_fac_adv'] == 'YES') ? 'Yes' : 'No'; ?></td>
                     </tr>
                     <tr>
                         <td style="width:100px">2.</td>
-                        <td>Approved By Faculty Advisor</td>
-                        <td><?php echo ($student['appr_by_fac_adv'] == 'YES') ? 'Yes' : 'No'; ?></td>
+                        <td>Approved By Department Office</td>
+                        <td><?php echo ($student['appr_by_dept_offc'] == 'YES') ? 'Yes' : 'No'; ?></td>
                     </tr>
                     <tr>
                         <td style="width:100px">3.</td>

@@ -16,49 +16,47 @@ if ($conn->connect_error) {
 // Start the session
 session_start();
 
-// Fetch the faculty advisor details using the session employee_id
-$employee_id = $_SESSION['employee_id'];
-$fac_adv_name = ""; // To store the faculty advisor's name
-$department = ""; // To store the faculty advisor's department
+// Fetch the fac_adv details using the session webmail
+$webmail = $_SESSION['webmail'];
+$fac_adv_name = ""; // To store the fac_adv's name
+$department = ""; // To store the fac_adv's department
 
-// Get the faculty advisor's details (name and department)
-$sql_fac_adv = "SELECT name, department FROM employees WHERE employee_id = ?";
+// Get the fac_adv's details (name and department)
+$sql_fac_adv = "SELECT name, department FROM employees WHERE webmail = ?";
 $stmt_fac_adv = $conn->prepare($sql_fac_adv);
-$stmt_fac_adv->bind_param("s", $employee_id);
+$stmt_fac_adv->bind_param("s", $webmail);
 $stmt_fac_adv->execute();
 $result_fac_adv = $stmt_fac_adv->get_result();
 
-if ($result_fac_adv->num_rows > 0) {
-    $fac_adv_row = $result_fac_adv->fetch_assoc();
-    $fac_adv_name = $fac_adv_row['name'];
-    $department = $fac_adv_row['department'];
-}
+$fac_adv_row = $result_fac_adv->fetch_assoc();
+$fac_adv_name = $fac_adv_row['name'];
+$department = $fac_adv_row['department'];
 
 // Fetch data based on the selected filter (All, Pending, Approved, Rejected)
 $filter = isset($_GET['filter']) ? $_GET['filter'] : 'all';
 
-// Define the query based on the filter and faculty advisor's department
+// Define the query based on the filter, fac_adv's department, and name
 switch ($filter) {
     case 'approved':
-        $query = "SELECT * FROM students WHERE appr_by_fac_adv = 'YES' AND department = ?";
+        $query = "SELECT * FROM students WHERE appr_by_fac_adv = 'YES' AND office_order='NO' AND claimed='YES' AND department = ?";
         break;
     case 'pending':
-        $query = "SELECT * FROM students WHERE appr_by_fac_adv = 'NO' AND department = ?";
+        $query = "SELECT * FROM students WHERE appr_by_fac_adv = 'NO' AND office_order='NO' AND claimed='YES' AND department = ?";
         break;
     case 'rejected':
-        $query = "SELECT * FROM students WHERE appr_by_fac_adv = 'REJECTED' AND department = ?";
+        $query = "SELECT * FROM students WHERE appr_by_fac_adv = 'REJECTED' AND office_order='NO'AND claimed='YES' AND department = ?";
         break;
     case 'phd':
-        $query = "SELECT * FROM students WHERE application_sent = 'YES' AND course = 'phd' AND department = ?";
+        $query = "SELECT * FROM students WHERE application_sent = 'YES' AND course = 'phd' AND office_order='NO' AND claimed='YES' AND department = ?";
         break;
     case 'mtech':
-        $query = "SELECT * FROM students WHERE application_sent = 'YES' AND course = 'mtech' AND department = ?";
+        $query = "SELECT * FROM students WHERE application_sent = 'YES' AND course = 'mtech' AND office_order='NO' AND claimed='YES' AND department = ?";
         break;
     default:
-        $query = "SELECT * FROM students WHERE department = ?";
+        $query = "SELECT * FROM students WHERE office_order='NO' AND claimed='YES' AND department = ?";
 }
 
-// Fetch student data for the faculty advisor's department
+// Fetch student data for the fac_adv's department and guide name
 $stmt_students = $conn->prepare($query);
 $stmt_students->bind_param("s", $department);
 $stmt_students->execute();
@@ -72,8 +70,8 @@ $result_students = $stmt_students->get_result();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Faculty Advisor</title>
-    <link rel="icon" href="images/iitp_symbol.png" type="image/png">
+    <title>Faculty Advisor Dashboard</title>
+    <link rel="icon" href="/images/iitp_symbol.png" type="image/png">
 
     <style>
         div.header {
@@ -174,7 +172,7 @@ $result_students = $stmt_students->get_result();
             border-collapse: collapse;
             width: 100%;
             max-width: 1200px;
-            margin-left: 190px;
+
         }
 
         tr:nth-child(even) {
@@ -209,6 +207,17 @@ $result_students = $stmt_students->get_result();
         ul.status li.active {
             background-color: #1f94ca;
         }
+
+        #stud_details {
+            display: inline-block;
+            text-decoration: none;
+            color: white;
+            padding: 6px 12px;
+            background-color: #1f94ca;
+
+            margin-bottom: 10px;
+
+        }
     </style>
 </head>
 
@@ -216,35 +225,39 @@ $result_students = $stmt_students->get_result();
 
     <div class="header">
         <div style="align-self: center; margin:5px; width: 100px;">
-            <img style="height: 90px; width: 90px;" src="images/iitp_symbol.png">
+            <img style="height: 90px; width: 90px;" src="/images/iitp_symbol.png">
         </div>
         <div style="width: 100%; margin-left: 100px; text-align: center;">
             <h1 style="font-size: 35px; color: white;">Student Fellowship Portal</h1>
         </div>
     </div>
 
+    <div class="header">
+        <!-- Omitted for brevity -->
+    </div>
+
     <div id="main">
         <div>
             <ul class="navbar">
-                <li><a href="start.html">Profile</a></li>
+                <li><a href="/start.php">Profile</a></li>
 
                 <!-- Dropdown for Students -->
                 <li class="dropdown">
                     <a href="javascript:void(0)">Students</a>
                     <div class="dropdown-content">
-                        <a href="fac_adv.php?course=phd">PhD</a>
-                        <a href="fac_adv.php?course=mtech">MTech</a>
+                        <a href="fac_adv.php?filter=phd">PhD</a>
+                        <a href="fac_adv.php?filter=mtech">MTech</a>
                     </div>
                 </li>
 
-                <li><a href="start.html">Logout</a></li>
+                <li><a href="fac_adv_login.php">Logout</a></li>
                 <hr>
             </ul>
         </div>
 
         <div id="status_table">
             <div>
-                <h2>Welcome <?php echo $fac_adv_name; ?> (Faculty Advisor)</h2>
+                <h2>Welcome <?php echo $fac_adv_name; ?></h2>
             </div>
             <div style="text-align: center; margin-top: 0px;">
                 <h1>Applications</h1>
@@ -269,66 +282,109 @@ $result_students = $stmt_students->get_result();
                 </script>
             </div>
 
+            <!-- Conditional rendering based on the filter -->
+            <?php if ($filter !== 'all') : ?>
+                <div style="text-align: center; margin: 10px;">
+                    <!-- Bulk Approval Controls -->
+                    <input type="checkbox" id="select_all" style="margin-right: 10px;">
+                    <select id="bulk_action">
+                        <option value="">Bulk Action</option>
+                        <option value="YES">Approve All</option>
+                        <option value="REJECTED">Reject All</option>
+                    </select>
+                    <button onclick="submitBulkApproval()">Submit</button>
+                </div>
+            <?php endif; ?>
+
             <div style="overflow-x: auto; margin: 10px;">
-                <table id="t4">
-                    <tr>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Gender</th>
-                        <th>Roll No</th>
-                        <th>Webmail</th>
-                        <th>Year</th>
-                        <th>Course</th>
-                        <th>Department</th>
-                        <th>Guide</th>
-                        <th>Account</th>
-                        <th>Bank</th>
-                        <th>IFSC</th>
-                        <th>DOJ</th>
-
-                        <th>Approval</th>
-
-                    </tr>
-                    <?php while ($row = $result_students->fetch_assoc()) { ?>
+                <form id="bulk_approval_form" action="fac_adv_approve.php" method="post">
+                    <table id="t4">
                         <tr>
-                            <td><?php echo $row['fname']; ?></td>
-                            <td><?php echo $row['lname']; ?></td>
-                            <td><?php echo $row['gender']; ?></td>
-                            <td><?php echo $row['rollno']; ?></td>
-                            <td><?php echo $row['webmail']; ?></td>
-                            <td><?php echo $row['year']; ?></td>
-                            <td><?php echo $row['course']; ?></td>
-                            <td><?php echo $row['department']; ?></td>
-                            <td><?php echo $row['employee_name']; ?></td>
-                            <td><?php echo $row['account']; ?></td>
-                            <td><?php echo $row['bank']; ?></td>
-                            <td><?php echo $row['ifsc']; ?></td>
-                            <td><?php echo $row['doj']; ?></td>
-                            <!-- <td>
-                                <form action="fac_adv_approve.php" method="post">
-                                    <input type="hidden" name="rollno" value="<?php echo $row['rollno']; ?>">
-                                    
-                                </form>
-                            </td> -->
-                            <td>
-                                <form action="fac_adv_approve.php" method="post">
-                                    <input type="hidden" name="rollno" value="<?php echo $row['rollno']; ?>">
-                                    <select name="approval_status">
-                                        <option value="YES" selected <?php if ($row['appr_by_fac_adv'] == 'YES') echo 'selected'; ?>>Approve</option>
-                                        <option value="REJECTED" <?php if ($row['appr_by_fac_adv'] == 'REJECTED'); ?>>Reject</option>
-                                    </select>
-                                    <br>
-                                    <textarea name="fac_adv_remarks" placeholder="Enter your remarks"></textarea>
-                                    <!-- <input type="text" name="fac_adv_remarks"> -->
-                                    <input type="submit" value="Submit">
-
-                                </form>
-                            </td>
-
+                            <?php if ($filter !== 'all') : ?>
+                                <th>Select</th>
+                            <?php endif; ?>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Roll No</th>
+                            <th>Year</th>
+                            <th>Course</th>
+                            <th>Department</th>
+                            <th>Guide</th>
+                            <th>Claimed Date</th>
+                            <th>Claimed Amount</th>
+                            <th>Approval</th>
                         </tr>
-                    <?php } ?>
-                </table>
+                        <?php while ($row = $result_students->fetch_assoc()) : ?>
+                            <tr>
+                                <?php if ($filter !== 'all') : ?>
+                                    <td>
+                                        <input type="checkbox" class="select_student" name="selected_students[]" value="<?php echo $row['rollno']; ?>">
+                                    </td>
+                                <?php endif; ?>
+                                <td><?php echo $row['fname']; ?></td>
+                                <td><?php echo $row['lname']; ?></td>
+                                <td><?php echo $row['rollno']; ?></td>
+                                <td><?php echo $row['year']; ?></td>
+                                <td><?php echo $row['course']; ?></td>
+                                <td><?php echo $row['department']; ?></td>
+                                <td><?php echo $row['employee_name']; ?></td>
+                                <td>
+                                    <?php
+                                    if (!empty($row['claimed_month'])) {
+                                        $date = new DateTime($row['claimed_month']);
+                                        echo $date->format('M Y');
+                                    } else {
+                                        echo "No date provided";
+                                    }
+                                    ?>
+                                </td>
+                                <td><?php echo $row['claimed_amount']; ?></td>
+                                <td>
+                                    <a id="stud_details" href="student_details.php?rollno=<?php echo $row['rollno']; ?>" target="_blank">View Full Details</a><br>
+
+                                    <?php if ($filter === 'all') : ?>
+                                        <input style="width:80px " type="text" value="<?php echo ($row['appr_by_fac_adv'] == 'YES') ? 'Approved' : (($row['appr_by_fac_adv'] == 'REJECTED') ? 'Rejected' : 'Pending'); ?>" readonly>
+                                    <?php else : ?>
+                                        <select name="approval_status[<?php echo $row['rollno']; ?>]">
+                                            <option value="YES" <?php if ($row['appr_by_fac_adv'] == 'YES') echo 'selected'; ?>>Approve</option>
+                                            <option value="REJECTED" <?php if ($row['appr_by_fac_adv'] == 'REJECTED') echo 'selected'; ?>>Reject</option>
+                                        </select>
+                                    <?php endif; ?>
+
+                                    <textarea name="fac_adv_remarks[<?php echo $row['rollno']; ?>]" placeholder="Enter your remarks" <?php echo ($filter === 'all') ? 'readonly' : ''; ?>><?php echo htmlspecialchars($row['fac_adv_remarks']); ?></textarea>
+                                </td>
+
+                            </tr>
+                        <?php endwhile; ?>
+                    </table>
+                </form>
             </div>
+
+            <script>
+                // Select all students
+                document.getElementById('select_all')?.addEventListener('change', function() {
+                    const checkboxes = document.querySelectorAll('.select_student');
+                    checkboxes.forEach(checkbox => checkbox.checked = this.checked);
+                });
+
+                // Handle bulk action dropdown
+                document.getElementById('bulk_action')?.addEventListener('change', function() {
+                    const approvalStatus = this.value;
+                    document.querySelectorAll('.select_student:checked').forEach(checkbox => {
+                        const rollno = checkbox.value;
+                        document.querySelector(`[name="approval_status[${rollno}]"]`).value = approvalStatus;
+                    });
+                });
+
+                // Submit bulk approval form
+                function submitBulkApproval() {
+                    // Filter out unchecked entries
+                    document.querySelectorAll('.select_student:not(:checked)').forEach(checkbox => {
+                        checkbox.closest('tr').querySelectorAll('select, textarea').forEach(input => input.disabled = true);
+                    });
+                    document.getElementById('bulk_approval_form').submit();
+                }
+            </script>
         </div>
     </div>
 

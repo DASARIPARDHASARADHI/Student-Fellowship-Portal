@@ -1,6 +1,60 @@
 <?php
 
-include("stud_login_conn.php")
+// include("stud_login_conn.php")
+
+// Start the session
+session_start();
+
+// Database configuration
+$servername = "localhost";
+$username = "root";
+$password = "pardhu14225";
+$dbname = "fellowship_portal";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Get the form data
+    $uname = $_POST['uname'];
+    $pwd = $_POST['pwd'];
+
+    // Prepared statement to prevent SQL injection
+    $stmt = $conn->prepare("SELECT password FROM students WHERE webmail=?");
+    $stmt->bind_param("s", $uname);
+    $stmt->execute();
+    $stmt->store_result();
+
+    if ($stmt->num_rows > 0) {
+        // Bind the result
+        $stmt->bind_result($hashed_password);
+        $stmt->fetch();
+
+        // Verify the password
+        if (password_verify($pwd, $hashed_password)) {
+            // Store username in session to track login
+            $_SESSION['logged_in_user'] = $uname;
+
+            // Redirect to the student profile page - <div class='result' >Invalid username or password. Please try again.</div>
+            header("Location: student.php");
+            exit();
+        } else {
+
+            $error_message = "Invalid username or password. Please try again.";
+        }
+    } else {
+        $error_message = "Invalid username or password. Please try again.";
+    }
+
+    $stmt->close();
+}
+
+$conn->close();
 
 ?>
 
@@ -129,7 +183,7 @@ include("stud_login_conn.php")
     <h2 style="color: white; font-size: 25px;">Student Login</h2>
 
     <div id="container">
-        <form id="registrationForm" action="stud_login_conn.php" method="POST">
+        <form id="registrationForm" method="POST">
             <div class="form-group">
                 <label for="uname">Username </label>
                 <input type="text" id="uname" name="uname" autofocus required size="35" placeholder="Username">
@@ -139,17 +193,46 @@ include("stud_login_conn.php")
                 <label for="pwd">Password </label>
                 <input type="password" id="pwd" name="pwd" required placeholder="Password">
             </div>
+            <div>
+                <a href="for_pass.php"
+                    style="text-decoration: none; font-weight: bold; color:rgb(199, 43, 32);" target="_blank">Forgot Password?</a><br><br>
+
+            </div>
 
 
 
             <div>
-                <input type="submit" value="Login">
+                <input type="submit" id="sub" value="Login">
             </div>
             <div>
                 <p>Didn't Register Yet! <a href="stud_register.php"
                         style="text-decoration: none; font-weight: bold; color: #0d1eb4;" target="_blank">Register
                         Here</a></p>
+
             </div>
+
+            <div id="error-message" class="err" style="display: none; color: red; font-weight: bold;"></div>
+
+            <script>
+                // Get the error message from PHP (only if login failed)
+                let errorMessage = <?php echo json_encode($error_message); ?>;
+
+                // Reference to the error message div
+                let errorDiv = document.getElementById("error-message");
+
+                // Display error message only if login failed
+                if (errorMessage && errorMessage !== "") {
+                    errorDiv.innerHTML = errorMessage;
+                    errorDiv.style.display = "block";
+
+                    // Set a timer to hide the message after 3 seconds (3000ms)
+                    setTimeout(function() {
+                        errorDiv.style.display = "none";
+                    }, 3000);
+                }
+            </script>
+
+
         </form>
 
     </div>

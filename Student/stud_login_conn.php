@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $pwd = $_POST['pwd'];
 
     // Prepared statement to prevent SQL injection
-    $stmt = $conn->prepare("SELECT password FROM students WHERE username=?");
+    $stmt = $conn->prepare("SELECT password FROM students WHERE webmail=?");
     $stmt->bind_param("s", $uname);
     $stmt->execute();
     $stmt->store_result();
@@ -41,10 +41,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header("Location: student.php");
             exit();
         } else {
-            echo "<div class='result'>Invalid username or password. Please try again.</div>";
+
+            echo "<script>alert('Invalid username or password. Please try again.'); window.location.href = 'stud_login.php';</script>";
         }
     } else {
-        echo "<div class='result'>Invalid username or password. Please try again.</div>";
+        echo "<script>alert('Invalid username or password. Please try again.'); window.location.href = 'stud_login.php';</script>";
     }
 
     $stmt->close();

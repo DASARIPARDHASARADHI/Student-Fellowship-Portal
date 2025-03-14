@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Details</title>
-    <link rel="icon" href="images/iitp_symbol.png" type="image/png">
+    <link rel="icon" href="/images/iitp_symbol.png" type="image/png">
     <!-- <style>
         body {
             font-family: Arial, sans-serif;
@@ -271,6 +271,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <input type="text" name="rollno" id="rollno" value="<?php echo $student['rollno']; ?>" readonly>
             </div>
             <div class="form-group">
+                <label for="gender">Gender:</label>
+                <input type="text" name="gender" id="gender" value="<?php echo $student['gender']; ?>" readonly>
+            </div>
+            <div class="form-group">
+                <label for="webmail">Roll Number:</label>
+                <input type="text" name="webmail" id="webmail" value="<?php echo $student['webmail']; ?>" readonly>
+            </div>
+            <div class="form-group">
                 <label for="year">Year:</label>
                 <input type="text" name="year" id="year" value="<?php echo $student['year']; ?>" readonly>
             </div>
@@ -286,9 +294,49 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <label for="employee_name">Guide Name:</label>
                 <input type="text" name="employee_name" id="employee_name" value="<?php echo $student['employee_name']; ?>" readonly>
             </div>
+            <div class="form-group">
+                <label for="office_order">Office Order:</label>
+                <input type="text" name="office_order" id="office_order" value="<?php echo $student['office_order']; ?>" readonly>
+            </div>
+            <div class="form-group">
+                <label for="doo">Date of Office Order:</label>
+                <input type="text" name="doo" id="employee_name" value="<?php echo $student['doo']; ?>" readonly>
+            </div>
+            <div class="form-group">
+                <label for="enhancement">Enhancement:</label>
+                <input type="text" name="enhancement" id="enhancement" value="<?php echo $student['enhancement']; ?>" readonly>
+            </div>
+            <div class="form-group">
+                <label for="doe">Date of Enhancement:</label>
+                <input type="text" name="doe" id="doe" value="<?php echo $student['doe']; ?>" readonly>
+            </div>
+            <div class="form-group">
+                <label for="claimed_month">Claimed Date:</label>
+                <input type="text" name="claimed_month" id="claimed_month" value="<?php
+                                                                                    // Check if claimed_month is not empty
+                                                                                    if (!empty($student['claimed_month'])) {
+                                                                                        // Create a DateTime object from the date
+                                                                                        $date = new DateTime($student['claimed_month']);
 
+                                                                                        // Format the date to display the full month name and year
+                                                                                        echo $date->format('j F Y'); // 'F' for full month name, 'Y' for 4-digit year
+                                                                                    } else {
+                                                                                        echo "No date provided";
+                                                                                    }
+                                                                                    ?>" readonly>
+            </div>
+            <div class="form-group">
+                <label for="claimed_amount">Claimed Amount:</label>
+                <input type="text" name="claimed_amount" id="claimed_amount" value="<?php echo $student['claimed_amount']; ?>" readonly>
+            </div>
+            <div class="form-group">
+                <label for="claimed_time">Claimed Time:</label>
+                <input type="text" name="claimed_time" id="claimed_time" value="<?php echo $student['claimed_time']; ?>" readonly>
+            </div>
         </form>
-        <form method="POST" action="supervisor_approve.php">
+        <h2 style="color:brown; text-align:center; margin-top:50px">Approval Submission</h2>
+        <form action="supervisor_approve_indv.php" method="post">
+            <input type="hidden" name="rollno" value="<?php echo $student['rollno']; ?>">
             <div class="form-group">
                 <label for="approval_status">Approval Status:</label>
                 <select name="approval_status" id="approval_status">
@@ -298,11 +346,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
             <div class="form-group">
                 <label for="supervisor_remarks">Remarks:</label>
-                <textarea name="supervisor_remarks" id="supervisor_remarks" placeholder="Enter your remarks"><?php echo $student['supervisor_remarks']; ?></textarea>
+                <textarea name="supervisor_remarks" id="supervisor_remarks" placeholder="Enter your remarks" rows="5" cols="30"></textarea>
             </div>
-            <div class="form-group">
-                <button type="submit" style="background-color: #1f94ca; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;" onclick="return confirm('Are you sure to submit?')">Submit</button>
-            </div>
+
+            <!-- <button type="button" style="background-color: #1b8a0c; color: white; padding: 10px 28px; border: none; border-radius: 4px; cursor: pointer;" onclick="return confirm('Are you want to edit?')">Edit</button> -->
+
+            <input type="submit" value="Submit" style="background-color: #1f94ca; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;" onclick="return confirm('Are you sure to submit?')">
+
         </form>
 
         <div class="logout">

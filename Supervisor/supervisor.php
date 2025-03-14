@@ -16,15 +16,15 @@ if ($conn->connect_error) {
 // Start the session
 session_start();
 
-// Fetch the supervisor details using the session employee_id
-$employee_id = $_SESSION['employee_id'];
+// Fetch the supervisor details using the session webmail
+$webmail = $_SESSION['webmail'];
 $supervisor_name = ""; // To store the supervisor's name
 $department = ""; // To store the supervisor's department
 
 // Get the supervisor's details (name and department)
-$sql_supervisor = "SELECT name, department FROM employees WHERE employee_id = ?";
+$sql_supervisor = "SELECT name, department FROM employees WHERE webmail = ?";
 $stmt_supervisor = $conn->prepare($sql_supervisor);
-$stmt_supervisor->bind_param("s", $employee_id);
+$stmt_supervisor->bind_param("s", $webmail);
 $stmt_supervisor->execute();
 $result_supervisor = $stmt_supervisor->get_result();
 
@@ -38,22 +38,22 @@ $filter = isset($_GET['filter']) ? $_GET['filter'] : 'all';
 // Define the query based on the filter, supervisor's department, and name
 switch ($filter) {
     case 'approved':
-        $query = "SELECT * FROM students WHERE appr_by_supervisor = 'YES' AND office_order='NO' AND department = ? AND employee_name = ?";
+        $query = "SELECT * FROM students WHERE appr_by_supervisor = 'YES' AND office_order='YES' AND claimed='YES' AND department = ? AND employee_name = ?";
         break;
     case 'pending':
-        $query = "SELECT * FROM students WHERE appr_by_supervisor = 'NO' AND office_order='NO' AND department = ? AND employee_name = ?";
+        $query = "SELECT * FROM students WHERE appr_by_supervisor = 'NO' AND office_order='YES' AND claimed='YES' AND department = ? AND employee_name = ?";
         break;
     case 'rejected':
-        $query = "SELECT * FROM students WHERE appr_by_supervisor = 'REJECTED' AND office_order='NO' AND department = ? AND employee_name = ?";
+        $query = "SELECT * FROM students WHERE appr_by_supervisor = 'REJECTED' AND office_order='YES'AND claimed='YES' AND department = ? AND employee_name = ?";
         break;
     case 'phd':
-        $query = "SELECT * FROM students WHERE application_sent = 'YES' AND course = 'phd' AND office_order='NO' AND department = ? AND employee_name = ?";
+        $query = "SELECT * FROM students WHERE application_sent = 'YES' AND course = 'phd' AND office_order='YES' AND claimed='YES' AND department = ? AND employee_name = ?";
         break;
     case 'mtech':
-        $query = "SELECT * FROM students WHERE application_sent = 'YES' AND course = 'mtech' AND office_order='NO' AND department = ? AND employee_name = ?";
+        $query = "SELECT * FROM students WHERE application_sent = 'YES' AND course = 'mtech' AND office_order='YES' AND claimed='YES' AND department = ? AND employee_name = ?";
         break;
     default:
-        $query = "SELECT * FROM students WHERE office_order='NO' AND department = ? AND employee_name = ?";
+        $query = "SELECT * FROM students WHERE office_order='YES' AND claimed='YES' AND department = ? AND employee_name = ?";
 }
 
 // Fetch student data for the supervisor's department and guide name
@@ -71,7 +71,7 @@ $result_students = $stmt_students->get_result();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Supervisor Dashboard</title>
-    <link rel="icon" href="images/iitp_symbol.png" type="image/png">
+    <link rel="icon" href="/images/iitp_symbol.png" type="image/png">
 
     <style>
         div.header {
@@ -249,8 +249,8 @@ $result_students = $stmt_students->get_result();
                         <a href="supervisor.php?filter=mtech">MTech</a>
                     </div>
                 </li>
-
-                <li><a href="/start.php">Logout</a></li>
+                <li><a href="change_password.php" target="_blank">Change Password</a></li>
+                <li><a href="supervisor_login.php">Logout</a></li>
                 <hr>
             </ul>
         </div>
@@ -282,44 +282,109 @@ $result_students = $stmt_students->get_result();
                 </script>
             </div>
 
+            <!-- Conditional rendering based on the filter -->
+            <?php if ($filter !== 'all') : ?>
+                <div style="text-align: center; margin: 10px;">
+                    <!-- Bulk Approval Controls -->
+                    <input type="checkbox" id="select_all" style="margin-right: 10px;">
+                    <select id="bulk_action">
+                        <option value="">Bulk Action</option>
+                        <option value="YES">Approve All</option>
+                        <option value="REJECTED">Reject All</option>
+                    </select>
+                    <button onclick="submitBulkApproval()">Submit</button>
+                </div>
+            <?php endif; ?>
+
             <div style="overflow-x: auto; margin: 10px;">
-                <table id="t4">
-                    <tr>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Roll No</th>
-                        <th>Year</th>
-                        <th>Course</th>
-                        <th>Department</th>
-                        <th>Guide</th>
-                        <th>Approval</th>
-                    </tr>
-                    <?php while ($row = $result_students->fetch_assoc()) { ?>
+                <form id="bulk_approval_form" action="supervisor_approve.php" method="post">
+                    <table id="t4">
                         <tr>
-                            <td><?php echo $row['fname']; ?></td>
-                            <td><?php echo $row['lname']; ?></td>
-                            <td><?php echo $row['rollno']; ?></td>
-                            <td><?php echo $row['year']; ?></td>
-                            <td><?php echo $row['course']; ?></td>
-                            <td><?php echo $row['department']; ?></td>
-                            <td><?php echo $row['employee_name']; ?></td>
-                            <td>
-                                <a id="stud_details" href="student_details.php?rollno=<?php echo $row['rollno']; ?>">View Full Details</a>
-                                <form action="supervisor_approve.php" method="post">
-                                    <input type="hidden" name="rollno" value="<?php echo $row['rollno']; ?>">
-                                    <select name="approval_status">
-                                        <option value="YES" <?php if ($row['appr_by_supervisor'] == 'YES') echo 'selected'; ?>>Approve</option>
-                                        <option value="REJECTED" <?php if ($row['appr_by_supervisor'] == 'REJECTED') echo 'selected'; ?>>Reject</option>
-                                    </select>
-                                    <br>
-                                    <textarea name="supervisor_remarks" placeholder="Enter your remarks"></textarea>
-                                    <input type="submit" value="Submit">
-                                </form>
-                            </td>
+                            <?php if ($filter !== 'all') : ?>
+                                <th>Select</th>
+                            <?php endif; ?>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Roll No</th>
+                            <th>Year</th>
+                            <th>Course</th>
+                            <th>Department</th>
+                            <th>Guide</th>
+                            <th>Claimed Date</th>
+                            <th>Claimed Amount</th>
+                            <th>Approval</th>
                         </tr>
-                    <?php } ?>
-                </table>
+                        <?php while ($row = $result_students->fetch_assoc()) : ?>
+                            <tr>
+                                <?php if ($filter !== 'all') : ?>
+                                    <td>
+                                        <input type="checkbox" class="select_student" name="selected_students[]" value="<?php echo $row['rollno']; ?>">
+                                    </td>
+                                <?php endif; ?>
+                                <td><?php echo $row['fname']; ?></td>
+                                <td><?php echo $row['lname']; ?></td>
+                                <td><?php echo $row['rollno']; ?></td>
+                                <td><?php echo $row['year']; ?></td>
+                                <td><?php echo $row['course']; ?></td>
+                                <td><?php echo $row['department']; ?></td>
+                                <td><?php echo $row['employee_name']; ?></td>
+                                <td>
+                                    <?php
+                                    if (!empty($row['claimed_month'])) {
+                                        $date = new DateTime($row['claimed_month']);
+                                        echo $date->format('M Y');
+                                    } else {
+                                        echo "No date provided";
+                                    }
+                                    ?>
+                                </td>
+                                <td><?php echo $row['claimed_amount']; ?></td>
+                                <td>
+                                    <a id="stud_details" href="student_details.php?rollno=<?php echo $row['rollno']; ?>" target="_blank">View Full Details</a><br>
+
+                                    <?php if ($filter === 'all') : ?>
+                                        <input style="width:80px " type="text" value="<?php echo ($row['appr_by_supervisor'] == 'YES') ? 'Approved' : (($row['appr_by_supervisor'] == 'REJECTED') ? 'Rejected' : 'Pending'); ?>" readonly>
+                                    <?php else : ?>
+                                        <select name="approval_status[<?php echo $row['rollno']; ?>]">
+                                            <option value="YES" <?php if ($row['appr_by_supervisor'] == 'YES') echo 'selected'; ?>>Approve</option>
+                                            <option value="REJECTED" <?php if ($row['appr_by_supervisor'] == 'REJECTED') echo 'selected'; ?>>Reject</option>
+                                        </select>
+                                    <?php endif; ?>
+
+                                    <textarea name="supervisor_remarks[<?php echo $row['rollno']; ?>]" placeholder="Enter your remarks" <?php echo ($filter === 'all') ? 'readonly' : ''; ?>><?php echo htmlspecialchars($row['supervisor_remarks']); ?></textarea>
+                                </td>
+
+                            </tr>
+                        <?php endwhile; ?>
+                    </table>
+                </form>
             </div>
+
+            <script>
+                // Select all students
+                document.getElementById('select_all')?.addEventListener('change', function() {
+                    const checkboxes = document.querySelectorAll('.select_student');
+                    checkboxes.forEach(checkbox => checkbox.checked = this.checked);
+                });
+
+                // Handle bulk action dropdown
+                document.getElementById('bulk_action')?.addEventListener('change', function() {
+                    const approvalStatus = this.value;
+                    document.querySelectorAll('.select_student:checked').forEach(checkbox => {
+                        const rollno = checkbox.value;
+                        document.querySelector(`[name="approval_status[${rollno}]"]`).value = approvalStatus;
+                    });
+                });
+
+                // Submit bulk approval form
+                function submitBulkApproval() {
+                    // Filter out unchecked entries
+                    document.querySelectorAll('.select_student:not(:checked)').forEach(checkbox => {
+                        checkbox.closest('tr').querySelectorAll('select, textarea').forEach(input => input.disabled = true);
+                    });
+                    document.getElementById('bulk_approval_form').submit();
+                }
+            </script>
         </div>
     </div>
 

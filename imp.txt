@@ -848,3 +848,859 @@ $conn->close();
 </body>
 
 </html>
+
+
+
+Faculty Advisor
+
+<?php
+// Database configuration
+$servername = "localhost";
+$username = "root";
+$password = "pardhu14225"; // Update to your MySQL password
+$dbname = "fellowship_portal";
+
+// Create a connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check the connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Start the session
+session_start();
+
+// Fetch the faculty advisor details using the session fac_adv_id
+$fac_adv_id = $_SESSION['fac_adv_id'];
+$fac_adv_name = ""; // To store the faculty advisor's name
+$department = ""; // To store the faculty advisor's department
+
+// Get the faculty advisor's details (name and department)
+$sql_fac_adv = "SELECT name, department FROM employees WHERE fac_adv_id = ?";
+$stmt_fac_adv = $conn->prepare($sql_fac_adv);
+$stmt_fac_adv->bind_param("s", $fac_adv_id);
+$stmt_fac_adv->execute();
+$result_fac_adv = $stmt_fac_adv->get_result();
+
+if ($result_fac_adv->num_rows > 0) {
+    $fac_adv_row = $result_fac_adv->fetch_assoc();
+    $fac_adv_name = $fac_adv_row['name'];
+    $department = $fac_adv_row['department'];
+}
+
+// Fetch data based on the selected filter (All, Pending, Approved, Rejected)
+$filter = isset($_GET['filter']) ? $_GET['filter'] : 'all';
+
+// Define the query based on the filter and faculty advisor's department
+switch ($filter) {
+    case 'approved':
+        $query = "SELECT * FROM students WHERE office_order='NO' AND appr_by_fac_adv = 'YES' AND department = ?";
+        break;
+    case 'pending':
+        $query = "SELECT * FROM students WHERE office_order='NO' AND appr_by_fac_adv = 'NO' AND department = ?";
+        break;
+    case 'rejected':
+        $query = "SELECT * FROM students WHERE office_order='NO' AND appr_by_fac_adv = 'REJECTED' AND department = ?";
+        break;
+    case 'phd':
+        $query = "SELECT * FROM students WHERE office_order='NO' AND application_sent = 'YES' AND course = 'phd' AND department = ?";
+        break;
+    case 'mtech':
+        $query = "SELECT * FROM students WHERE office_order='NO' AND application_sent = 'YES' AND course = 'mtech' AND department = ?";
+        break;
+    default:
+        $query = "SELECT * FROM students WHERE office_order='NO' AND department = ?";
+}
+
+// Fetch student data for the faculty advisor's department
+$stmt_students = $conn->prepare($query);
+$stmt_students->bind_param("s", $department);
+$stmt_students->execute();
+$result_students = $stmt_students->get_result();
+
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faculty Advisor</title>
+    <link rel="icon" href="/images/iitp_symbol.png" type="image/png">
+
+    <style>
+        div.header {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            background-color: #1f94ca;
+        }
+
+        body {
+            margin: 0;
+        }
+
+        ul.navbar {
+            list-style-type: none;
+            width: 150px;
+            height: 900px;
+            padding: 0;
+            margin: 0;
+            background-color: #0a5375;
+            border-top: solid 1px #042f42;
+        }
+
+        li {
+            padding: 8px 12px;
+            text-align: center;
+            background-color: #0a5375;
+            font-size: large;
+        }
+
+        li a {
+            color: rgb(255, 255, 255);
+            text-decoration: none;
+            display: block;
+        }
+
+        li:hover,
+        li:active {
+            padding: 8px 12px;
+            text-align: center;
+            background-color: #1192ce;
+        }
+
+        /* Dropdown container */
+        .dropdown {
+            position: relative;
+            display: block;
+            text-align: center;
+
+        }
+
+        /* Dropdown content (hidden by default) */
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #0a5375;
+            min-width: 150px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        /* Links inside the dropdown */
+        .dropdown-content a {
+            color: white;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+        }
+
+        /* Change color of dropdown links on hover */
+        .dropdown-content a:hover {
+            background-color: #1192ce;
+        }
+
+        /* Show the dropdown menu on hover */
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        /* Navbar styles */
+        #main {
+            display: flex;
+            overflow: auto;
+
+        }
+
+        #status_table {
+            display: flex;
+            margin-left: 10px;
+            width: 100%;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        table {
+            border: solid black 1px;
+            border-collapse: collapse;
+            width: 100%;
+            max-width: 1200px;
+            margin-left: 190px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #88c7e4;
+        }
+
+        th,
+        td {
+            border: solid black 1px;
+            text-align: center;
+            padding: 10px;
+        }
+
+        ul.status {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            background-color: #0a5375;
+        }
+
+        ul.status li {
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        ul.status li a {
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+        }
+
+        ul.status li.active {
+            background-color: #1f94ca;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <div style="align-self: center; margin:5px; width: 100px;">
+            <img style="height: 90px; width: 90px;" src="/images/iitp_symbol.png">
+        </div>
+        <div style="width: 100%; margin-left: 100px; text-align: center;">
+            <h1 style="font-size: 35px; color: white;">Student Fellowship Portal</h1>
+        </div>
+    </div>
+
+    <div id="main">
+        <div>
+            <ul class="navbar">
+                <li><a href="start.html">Profile</a></li>
+
+                <!-- Dropdown for Students -->
+                <li class="dropdown">
+                    <a href="javascript:void(0)">Students</a>
+                    <div class="dropdown-content">
+                        <a href="fac_adv.php?course=phd">PhD</a>
+                        <a href="fac_adv.php?course=mtech">MTech</a>
+                    </div>
+                </li>
+
+                <li><a href="start.html">Logout</a></li>
+                <hr>
+            </ul>
+        </div>
+
+        <div id="status_table">
+            <div>
+                <h2>Welcome <?php echo $fac_adv_name; ?> (Faculty Advisor)</h2>
+            </div>
+            <div style="text-align: center; margin-top: 0px;">
+                <h1>Applications</h1>
+            </div>
+            <div>
+                <ul class="status">
+                    <li id="all"><a href="fac_adv.php?filter=all">All</a></li>
+                    <li id="pending"><a href="fac_adv.php?filter=pending">Pending</a></li>
+                    <li id="approved"><a href="fac_adv.php?filter=approved">Approved</a></li>
+                    <li id="rejected"><a href="fac_adv.php?filter=rejected">Rejected</a></li>
+                </ul>
+
+                <script>
+                    const currentFilter = "<?php echo $filter; ?>";
+                    const statusLinks = document.querySelectorAll('ul.status li');
+                    statusLinks.forEach(link => {
+                        const filterId = link.id;
+                        if (filterId === currentFilter) {
+                            link.classList.add('active');
+                        }
+                    });
+                </script>
+            </div>
+
+            <div style="overflow-x: auto; margin: 10px;">
+                <table id="t4">
+                    <tr>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Gender</th>
+                        <th>Roll No</th>
+                        <th>Webmail</th>
+                        <th>Year</th>
+                        <th>Course</th>
+                        <th>Department</th>
+                        <th>Guide</th>
+                        <th>Account</th>
+                        <th>Bank</th>
+                        <th>IFSC</th>
+                        <th>DOJ</th>
+                        <th>Office Order</th>
+
+                        <th>Approval</th>
+
+                    </tr>
+                    <?php while ($row = $result_students->fetch_assoc()) { ?>
+                        <tr>
+                            <td><?php echo $row['fname']; ?></td>
+                            <td><?php echo $row['lname']; ?></td>
+                            <td><?php echo $row['gender']; ?></td>
+                            <td><?php echo $row['rollno']; ?></td>
+                            <td><?php echo $row['webmail']; ?></td>
+                            <td><?php echo $row['year']; ?></td>
+                            <td><?php echo $row['course']; ?></td>
+                            <td><?php echo $row['department']; ?></td>
+                            <td><?php echo $row['employee_name']; ?></td>
+                            <td><?php echo $row['account']; ?></td>
+                            <td><?php echo $row['bank']; ?></td>
+                            <td><?php echo $row['ifsc']; ?></td>
+                            <td><?php echo $row['doj']; ?></td>
+                            <td><?php echo $row['office_order']; ?></td>
+                            <!-- <td>
+                                <form action="fac_adv_approve.php" method="post">
+                                    <input type="hidden" name="rollno" value="<?php echo $row['rollno']; ?>">
+                                    
+                                </form>
+                            </td> -->
+                            <td>
+                                <form action="fac_adv_approve.php" method="post">
+                                    <input type="hidden" name="rollno" value="<?php echo $row['rollno']; ?>">
+                                    <select name="approval_status">
+                                        <option value="YES" selected <?php if ($row['appr_by_fac_adv'] == 'YES') echo 'selected'; ?>>Approve</option>
+                                        <option value="REJECTED" <?php if ($row['appr_by_fac_adv'] == 'REJECTED'); ?>>Reject</option>
+                                    </select>
+                                    <br>
+                                    <textarea name="fac_adv_remarks" placeholder="Enter your remarks"></textarea>
+                                    <!-- <input type="text" name="fac_adv_remarks"> -->
+                                    <input type="submit" value="Submit">
+
+                                </form>
+                            </td>
+
+                        </tr>
+                    <?php } ?>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
+
+
+
+Formula
+
+approved_amount = claimed_amount - (claimed_amount/Number of days in the month of "claimed_month")*absent_days
+
+1) Extract the month from the claimed_month and do calculate how many for that month (we can have 28 or 29 or 30 or 31 days)
+2) After entering absent_days, then the approved amount should be calculate itself only.
+
+
+
+
+
+
+<h2 style="color:brown; text-align:left; margin-top:50px">Fellowship Details</h2>
+
+                <div class="form-group">
+                    <label for="claimed_month">Claimed Month (With Full Date)</label>
+                    <input type="text" id="claimed_month" name="claimed_month" disabled value="<?php echo $student["claimed_month"] ?>">
+                </div>
+                <div class="form-group">
+                    <label for="claimed_amount">Claimed Amount</label>
+                    <input type="text" id="claimed_amount" name="claimed_amount" disabled value="<?php echo $student["claimed_amount"] ?>">
+                </div>
+
+                <div class="form-group">
+                    <label for="claimed">Claimed</label>
+                    <input type="text" id="claimed" name="claimed" disabled value="<?php echo $student["claimed"] ?>">
+                </div>
+
+                <div class="form-group">
+                    <label for="absent_days">Absent Days</label>
+                    <input type="text" id="absent_days" value="<?php echo $student['absent_days']; ?>" disabled>
+                </div>
+                <div class="form-group">
+                    <label for="approved_amount">Approved Amount</label>
+                    <input type="text" id="approved_amount" name="approved_amount" disabled value="<?php echo $student["approved_amount"] ?>">
+                </div>
+
+
+
+
+
+Related to database and sever issues
+Store the data folder in the mysql folder in some place, so that using the "particular folder" and "ibdata1" file in that data folder we can restore a particular database
+If we got any error follow a video in the youtube (hint: data_old)
+Another suggestion is, do change or remove password in config.php file in the phpmyAdmin 
+
+
+
+
+
+<?php
+// Start session to track logged-in user
+session_start();
+
+// Check if the user is logged in
+if (!isset($_SESSION['logged_in_user'])) {
+    // If not, redirect to login page
+    header("Location: stud_login.php");
+    exit();
+}
+
+// Database configuration
+$servername = "localhost";
+$username = "root";
+$password = "pardhu14225";
+$dbname = "fellowship_portal";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Fetch student details using the session username
+$uname = $_SESSION['logged_in_user'];
+$stmt = $conn->prepare("SELECT fname, lname, application_sent, appr_by_fac_adv, appr_by_hod, amount_appr, amount FROM students WHERE username=?");
+$stmt->bind_param("s", $uname);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows > 0) {
+    $student = $result->fetch_assoc();
+} else {
+    echo "No student data found.";
+    exit();
+}
+
+$stmt->close();
+$conn->close();
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student</title>
+    <link rel="icon" href="iitp_symbol.png" type="image/png">
+    <style>
+        div.header {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            background-color: #1f94ca;
+        }
+
+        body {
+            margin: 0;
+        }
+
+        ul {
+            list-style-type: none;
+            width: 150px;
+            height: 500px;
+            padding: 0;
+            margin: 0;
+            background-color: #0a5375;
+            border-top: solid 1px #042f42;
+        }
+
+        li {
+            padding: 8px 12px;
+            text-align: center;
+            background-color: #0a5375;
+            font-size: large;
+        }
+
+        li a {
+            color: rgb(255, 255, 255);
+            text-decoration: none;
+            display: block;
+        }
+
+        li:hover,
+        li:active {
+            padding: 8px 12px;
+            text-align: center;
+            background-color: #1192ce;
+        }
+
+        #main {
+            display: flex;
+            overflow: auto;
+        }
+
+        #status_table {
+            display: flex;
+            /* border: solid 1px; */
+            width: 100%;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        table {
+            border: solid black 1px;
+            border-collapse: collapse;
+            width: 500px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #88c7e4;
+        }
+
+        th,
+        td {
+            border: solid black 1px;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .logout {
+            text-align: center;
+            margin-top: 80px;
+        }
+
+        .logout a {
+            padding: 10px 20px;
+            background-color: #1f94ca;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+
+        .logout a:hover {
+            background-color: #0d7ba5;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <div style="align-self: center; margin:5px; width: 100px;">
+            <img style="height: 90px; width: 90px;" src="iitp_symbol.png">
+        </div>
+
+        <div style="width: 100%; text-align: center;">
+            <h1 style="font-size: 35px; color: white; text-align:center">Student Fellowship Portal</h1>
+        </div>
+    </div>
+
+    <div id="main">
+        <div>
+            <ul>
+                <li><a href="student_profile.php">Profile</a></li>
+                <li class="current"><a href="student.php">Status</a></li>
+                <li><a href="stud_claims.php">Previous Claims</a></li>
+                <li><a href="stud_logout.php">Logout</a></li>
+                <hr>
+            </ul>
+        </div>
+
+        <div id="status_table">
+            <div>
+                <h2>Welcome <?php echo $student['fname'] . ' ' . $student['lname']; ?>!</h2>
+            </div>
+            <div style="text-align: center; margin-top: 0px;">
+                <h1>Previous Claims</h1>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <table style="width: 800px;">
+                    <tr>
+                        <th style="width:100px">SI No.</th>
+                        <th>Claimed Amount</th>
+                        <th>Claimed Month</th>
+                        <th>Claimed Date</th>
+                    </tr>
+                    <tr>
+
+                    </tr>
+
+                </table>
+            </div>
+            <!-- <div class="logout">
+                <a href="stud_profile.php">Back to Profile</a>
+            </div> -->
+
+        </div>
+    </div>
+</body>
+
+</html>
+
+
+Using the attributes of "students_claims" table i.e rollno, claimed_month, claimed_amount, claimed_time, Fill the table in the above code, fill all the entries of that student using their rollno and 
+
+
+
+
+
+
+<?php
+// Database configuration
+$servername = "localhost";
+$username = "root";
+$password = "pardhu14225"; // Update to your MySQL password
+$dbname = "fellowship_portal";
+
+// Include PHPMailer classes
+require 'C:/Users/apgur/vendor/autoload.php';
+require 'C:/Users/apgur/vendor/phpmailer/phpmailer/src/PHPMailer.php';
+require 'C:/Users/apgur/vendor/phpmailer/phpmailer/src/SMTP.php';
+require 'C:/Users/apgur/vendor/phpmailer/phpmailer/src/Exception.php';
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+// Create a connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check the connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Check if it's an AJAX request to get department or employee names
+if (isset($_GET['departments'])) {
+    // Fetch unique department names for the first dropdown
+    $query = "SELECT DISTINCT department FROM employees ORDER BY department ASC";
+    $result = $conn->query($query);
+    $departments = [];
+
+    while ($row = $result->fetch_assoc()) {
+        $departments[] = $row['department'];
+    }
+    echo json_encode($departments);
+    exit();
+}
+
+if (isset($_GET['department'])) {
+    // Fetch employee names based on department
+    $department = $conn->real_escape_string($_GET['department']);
+    $query = "SELECT name FROM employees WHERE department = ? ORDER BY name ASC";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("s", $department);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $employees = [];
+
+    while ($row = $result->fetch_assoc()) {
+        $employees[] = $row['name'];
+    }
+    echo json_encode($employees);
+    exit();
+}
+
+// Check if form is submitted using POST request for registration
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Get form data and sanitize inputs
+    $fname = $conn->real_escape_string($_POST['fname']);
+    $lname = $conn->real_escape_string($_POST['lname']);
+    $gender = $conn->real_escape_string($_POST['gender']);
+    $rollno = $conn->real_escape_string($_POST['rollno']);
+    $webmail = $conn->real_escape_string($_POST['webmail']);
+    $year = $conn->real_escape_string($_POST['year']);
+    $course = $conn->real_escape_string($_POST['course']);
+    $department = $conn->real_escape_string($_POST['firstDropdown']);  // Department from first dropdown
+    $employee_name = $conn->real_escape_string($_POST['secondDropdown']);  // Employee from second dropdown
+    $account = $conn->real_escape_string($_POST['account']);
+    $bank = $conn->real_escape_string($_POST['bank']);
+    $ifsc = $conn->real_escape_string($_POST['ifsc']);
+    $doj = $conn->real_escape_string($_POST['doj']);
+    $remarks = $conn->real_escape_string($_POST['remarks']);
+    $office_order = $conn->real_escape_string($_POST['office_order']);
+
+    // Allow empty values for doo, doe, and enhancement fields
+    $doo = isset($_POST['doo']) ? $conn->real_escape_string($_POST['doo']) : '';
+    $enhancement = isset($_POST['enhancement']) ? $conn->real_escape_string($_POST['enhancement']) : '';
+    $doe = isset($_POST['doe']) ? $conn->real_escape_string($_POST['doe']) : '';
+
+    // Extract username from webmail (part before '@')
+    $username = explode('@', $webmail)[0];
+
+    // Hash the password for security
+    $pwd = password_hash($_POST['pwd'], PASSWORD_BCRYPT);
+
+    // SQL query to insert data
+    $sql = "INSERT INTO students (fname, lname, gender, rollno, webmail, year, course, department, employee_name, account, bank, ifsc, doj, username, password, remarks, office_order, doo, enhancement, doe)
+            VALUES ('$fname', '$lname', '$gender', '$rollno', '$webmail', '$year', '$course', '$department', '$employee_name', '$account', '$bank', '$ifsc', '$doj', '$username', '$pwd', '$remarks', '$office_order', '$doo', '$enhancement', '$doe')";
+
+    // Execute query and check if successful
+    if ($conn->query($sql) === TRUE) {
+        // Display the generated username to the user
+        echo "<h2>Registration successful!</h2>";
+        echo "<p>Your username is: <strong>$username</strong></p>";
+        echo "<a href='stud_login.php' style='text-decoration: none; font-weight: bold; color: #0d1eb4;' target='_blank'>Login Here</a>";
+
+        // Send email notification with PHPMailer
+        $mail = new PHPMailer(true);
+        try {
+            // SMTP server configuration
+            $mail->isSMTP();
+            $mail->Host = 'smtp.office365.com'; // Outlook SMTP server
+            $mail->SMTPAuth = true;
+            $mail->Username = 'your-email@outlook.com'; // Your Outlook email address
+            $mail->Password = 'your-email-password'; // Your Outlook email password
+            $mail->SMTPSecure = 'tls'; // Use TLS encryption
+            $mail->Port = 587; // SMTP port for TLS
+
+            // Sender and recipient settings
+            $mail->setFrom('your-email@outlook.com', 'Fellowship Portal Team');
+            $mail->addAddress($webmail); // Student's email address from form input
+            $mail->addReplyTo('your-email@outlook.com', 'Fellowship Portal Team');
+
+            // Email content
+            $mail->isHTML(true);
+            $mail->Subject = 'Your Registration Details for Fellowship Portal';
+            $mail->Body = "
+                Dear $fname $lname,<br><br>
+                Thank you for registering on our Fellowship Portal.<br><br>
+                Your login details are as follows:<br>
+                <strong>Username:</strong> $username<br>
+                <strong>Password:</strong> [Use the password you set during registration]<br><br>
+                For security reasons, we do not store your plain password.<br>
+                If you have any issues, please contact support.<br><br>
+                Best regards,<br>
+                Fellowship Portal Team
+            ";
+
+            // Send the email
+            $mail->send();
+            echo "<p>An email has been sent to your registered email address with your login details.</p>";
+        } catch (Exception $e) {
+            echo "<p>Registration successful, but there was an error sending the email. Mailer Error: {$mail->ErrorInfo}</p>";
+        }
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+}
+
+// Close connection
+$conn->close();
+
+
+
+
+<option value="PENDING" <?php if ($row['appr_by_fac_adv'] == 'NO') echo 'selected'; ?>>Pending</option> <!-- New option -->
+
+
+
+
+
+<?php
+
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require 'vendor/autoload.php';
+
+
+// Database configuration
+$servername = "localhost";
+$username = "root";
+$password = "pardhu14225"; // Update to your MySQL password
+$dbname = "fellowship_portal";
+
+// Create a connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check the connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Check if form is submitted using POST request for registration
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Get form data and sanitize inputs
+
+    $webmail = $conn->real_escape_string($_POST['webmail']);
+
+    // Execute query and check if successful
+    if ($conn->query($sql) === TRUE) {
+        // Send email function
+        function sendEmail($recipient, $mail_subject, $mail_body, $mail_attachment = null)
+        {
+            try {
+                $mail = new PHPMailer(true);
+
+                // SMTP Configuration
+                $mail->isSMTP();
+                $mail->Host = "smtp.office365.com";
+                $mail->SMTPAuth = true;
+                $mail->Username = "dasari_2101cs22@iitp.ac.in"; // Your IITP Email (Sender)
+                $mail->Password = "Pardhu14225@s"; // Use App Password (Not normal password)
+                $mail->SMTPSecure = "tls";
+                $mail->Port = 587;
+
+                // Sender & Recipient
+                $mail->setFrom("dasari_2101cs22@iitp.ac.in", "IITP Notifications"); // Your Email as Sender
+                $mail->addAddress($recipient); // Receiver Email (Webmail)
+
+                // Email Content
+                $mail->isHTML(true);
+                $mail->Subject = $mail_subject;
+                $mail->Body = $mail_body;
+
+                // Attachments (Optional)
+                if ($mail_attachment) {
+                    $mail->addAttachment($mail_attachment);
+                }
+
+                // Send Email
+                if ($mail->send()) {
+                    echo "<script>
+        alert('Registered successfully! Check your email for login credentials');
+        window.location.href = 'stud_login.php';
+    </script>";
+                } else {
+                    return "❌ Email failed: " . $mail->ErrorInfo;
+                }
+            } catch (Exception $e) {
+                return "❌ Error: " . $e->getMessage();
+            }
+        }
+
+        // Webmail variable (recipient's email)
+        $recipient_email = $webmail; // Ensure $webmail contains the recipient's email
+
+        // Email subject
+        $email_subject = "Registration Successful! on Student Fellowship Portal";
+
+        // Email body (formatted HTML)
+        $email_body = "
+    <p>Here is your user credentials to Login
+    <p>
+    <p>Your username is: <strong>$webmail</strong></p><br>
+    
+    <p><i>With Regards</i></p>
+    <p>Student Fellowship Portal</p>
+    <p>IIT Patna, 801106</p>
+    
+    ";
+
+        // Send the email
+        echo sendEmail($recipient_email, $email_subject, $email_body);
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+}
+
+// Close connection
+$conn->close();
+
+?>

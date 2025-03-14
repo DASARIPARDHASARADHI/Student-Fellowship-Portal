@@ -1,3 +1,57 @@
+<?php
+// Database configuration
+$servername = "localhost";
+$username = "root";
+$password = "pardhu14225"; // Update to your MySQL password
+$dbname = "fellowship_portal";
+
+// Create a connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check the connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Check if the form is submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $webmail = $conn->real_escape_string($_POST['webmail']);
+    $pwd = $_POST['pwd']; // Plain text password entered by the user
+
+    // Fetch employee details from the database
+    $sql = "SELECT * FROM employees WHERE webmail = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $webmail);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $stored_password = $row['password'];
+
+        // Check if the stored password is hashed or in plain text
+        if (password_verify($pwd, $stored_password) || $pwd === $stored_password) {
+            // Password is correct, start session and redirect to supervisor.php
+            session_start();
+            $_SESSION['webmail'] = $row['webmail'];
+            $_SESSION['name'] = $row['name']; // Assuming the employee name is stored
+            header("Location: supervisor.php");
+            exit();
+        } else {
+
+            $error_message = "Invalid username or password. Please try again.";
+        }
+    } else {
+        $error_message = "Invalid username or password. Please try again.";
+    }
+}
+
+// Close the connection
+$conn->close();
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -123,10 +177,10 @@
     <h2 style="color: white; font-size: 25px;">Employee Login</h2>
 
     <div id="container">
-        <form id="registrationForm" action="supervisor_login_conn.php" method="POST">
+        <form id="registrationForm" action="supervisor_login.php" method="POST">
             <div class="form-group">
-                <label for="employee_id">Employer ID </label>
-                <input type="text" id="employee_id" name="employee_id" autofocus required size="35" placeholder="Employer ID">
+                <label for="webmail">Username </label>
+                <input type="text" id="webmail" name="webmail" autofocus required size="35" placeholder="Username">
             </div>
 
             <div class="form-group">
@@ -139,6 +193,29 @@
             <div>
                 <input type="submit" value="Login">
             </div>
+
+
+            <div id="error-message" class="err" style="display: none; color: red; font-weight: bold;"></div>
+
+            <script>
+                // Get the error message from PHP (only if login failed)
+                let errorMessage = <?php echo json_encode($error_message); ?>;
+
+                // Reference to the error message div
+                let errorDiv = document.getElementById("error-message");
+
+                // Display error message only if login failed
+                if (errorMessage && errorMessage !== "") {
+                    errorDiv.innerHTML = errorMessage;
+                    errorDiv.style.display = "block";
+
+                    // Set a timer to hide the message after 3 seconds (3000ms)
+                    setTimeout(function() {
+                        errorDiv.style.display = "none";
+                    }, 3000);
+                }
+            </script>
+
         </form>
 
     </div>

@@ -1,0 +1,4 @@
+Related to database and sever issues
+Store the data folder in the mysql folder in some place, so that using the "particular folder" and "ibdata1" file in that data folder we can restore a particular database
+If we got any error follow a video in the youtube (hint: data_old)
+Another suggestion is, do change or remove password in config.php file in the phpmyAdmin 

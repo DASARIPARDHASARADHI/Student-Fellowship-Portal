@@ -146,12 +146,13 @@ include("stud_register_conn.php")
                 .then(employees => {
                     const secondDropdown = document.getElementById("secondDropdown");
                     secondDropdown.innerHTML = '<option value="">Select Employee</option>';
-                    employees.forEach(employee => {
-                        const option = document.createElement("option");
-                        option.value = employee;
-                        option.text = employee;
-                        secondDropdown.add(option);
-                    });
+                    employees.filter(employee => employee !== "CS Department")
+                        .forEach(employee => {
+                            const option = document.createElement("option");
+                            option.value = employee;
+                            option.text = employee;
+                            secondDropdown.add(option);
+                        });
                     secondDropdown.disabled = false; // Enable the second dropdown
                 });
         }
@@ -217,6 +218,47 @@ include("stud_register_conn.php")
         window.onload = initializeFormFeatures;
     </script>
 
+    <!-- For Checking the password is same or not with confirm password -->
+    <script>
+        document.getElementById('registrationForm').addEventListener('submit', function(event) {
+            // Get passwords
+            const password = document.getElementById('pwd').value;
+            const confirmPassword = document.getElementById('cnf_pwd').value;
+
+            // Check if passwords match
+            if (password !== confirmPassword) {
+                event.preventDefault(); // Stop form submission if passwords don't match
+                alert('Password and Confirm Password should be the same!');
+                return;
+            }
+
+            // Allow form submission to PHP if passwords match
+            // Displaying the result after the form is processed server-side is not required anymore,
+            // but if you want to display some info, you can still add that after the form submits.
+        });
+
+
+        // Function to toggle password visibility
+        function togglePassword() {
+            var pwdField = document.getElementById("pwd");
+            if (pwdField.type === "password") {
+                pwdField.type = "text";
+            } else {
+                pwdField.type = "password";
+            }
+        }
+
+        // Function to toggle confirm password visibility
+        function toggleConfirmPassword() {
+            var cnfPwdField = document.getElementById("cnf_pwd");
+            if (cnfPwdField.type === "password") {
+                cnfPwdField.type = "text";
+            } else {
+                cnfPwdField.type = "password";
+            }
+        }
+    </script>
+
 </head>
 
 <body>
@@ -264,7 +306,9 @@ include("stud_register_conn.php")
                 <label for="year">Year </label>
                 <select id="year" name="year" required>
                     <option value="First Year" selected>First Year</option>
-
+                    <option value="Second Year">Second Year</option>
+                    <option value="Third Year">Third Year</option>
+                    <option value="Fourth Year">Fourth Year</option>
                 </select>
             </div>
 
@@ -285,7 +329,7 @@ include("stud_register_conn.php")
             </div>
 
             <div class="form-group">
-                <label for="secondDropdown">Guide Name</label>
+                <label for="secondDropdown">Faculty Advisor/ Guide Name</label>
                 <select id="secondDropdown" name="secondDropdown" disabled required>
                     <option value="">Select Employee</option>
                 </select>
@@ -312,7 +356,7 @@ include("stud_register_conn.php")
             </div>
 
             <div class="form-group">
-                <label for="office_order">Approval of Office Order </label>
+                <label for="office_order"> Memo received from Academic Section</label> <!-- Approval of Office Order -->
                 <select id="office_order" name="office_order" required>
                     <option value="YES">Yes</option>
                     <option value="NO" selected>No</option>
@@ -320,7 +364,7 @@ include("stud_register_conn.php")
             </div>
 
             <div class="form-group">
-                <label for="doo">Date of Office Order</label>
+                <label for="doo">Date of Memo received</label>
                 <input type="date" id="doo" name="doo" required title="Select date">
             </div>
 
@@ -377,45 +421,7 @@ include("stud_register_conn.php")
         <div id="result" class="result" style="display: none;"></div>
     </div>
 
-    <script>
-        document.getElementById('registrationForm').addEventListener('submit', function(event) {
-            // Get passwords
-            const password = document.getElementById('pwd').value;
-            const confirmPassword = document.getElementById('cnf_pwd').value;
 
-            // Check if passwords match
-            if (password !== confirmPassword) {
-                event.preventDefault(); // Stop form submission if passwords don't match
-                alert('Password and Confirm Password should be the same!');
-                return;
-            }
-
-            // Allow form submission to PHP if passwords match
-            // Displaying the result after the form is processed server-side is not required anymore,
-            // but if you want to display some info, you can still add that after the form submits.
-        });
-
-
-        // Function to toggle password visibility
-        function togglePassword() {
-            var pwdField = document.getElementById("pwd");
-            if (pwdField.type === "password") {
-                pwdField.type = "text";
-            } else {
-                pwdField.type = "password";
-            }
-        }
-
-        // Function to toggle confirm password visibility
-        function toggleConfirmPassword() {
-            var cnfPwdField = document.getElementById("cnf_pwd");
-            if (cnfPwdField.type === "password") {
-                cnfPwdField.type = "text";
-            } else {
-                cnfPwdField.type = "password";
-            }
-        }
-    </script>
 </body>
 
 </html>

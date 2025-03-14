@@ -1,6 +1,4 @@
 <?php
-session_start(); // Start the session to store HOD ID after login
-
 // Database configuration
 $servername = "localhost";
 $username = "root";
@@ -15,47 +13,55 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Fetch HOD ID from the session (assuming it is set during login)
-$employee_id = $_SESSION['employee_id'];  // Update with how you store the HOD ID during login
+// Start the session
+session_start();
 
-// Fetch HOD's department based on the HOD ID
-$hod_query = "SELECT department FROM employees WHERE employee_id = '$employee_id'";
-$hod_result = $conn->query($hod_query);
-$hod_row = $hod_result->fetch_assoc();
-$hod_department = $hod_row['department'];
+// Fetch the hod details using the session webmail
+$webmail = $_SESSION['webmail'];
+$hod_name = ""; // To store the hod's name
+$department = ""; // To store the hod's department
 
-// Filter selection for student status
+// Get the hod's details (name and department)
+$sql_hod = "SELECT name, department FROM employees WHERE webmail = ?";
+$stmt_hod = $conn->prepare($sql_hod);
+$stmt_hod->bind_param("s", $webmail);
+$stmt_hod->execute();
+$result_hod = $stmt_hod->get_result();
+
+$hod_row = $result_hod->fetch_assoc();
+$hod_name = $hod_row['name'];
+$department = $hod_row['department'];
+
+// Fetch data based on the selected filter (All, Pending, Approved, Rejected)
 $filter = isset($_GET['filter']) ? $_GET['filter'] : 'all';
 
-// Define the query based on the filter for approved students from the HOD's department
+// Define the query based on the filter, hod's department, and name
 switch ($filter) {
     case 'approved':
-        $query = "SELECT * FROM students WHERE appr_by_fac_adv = 'YES' AND appr_by_hod = 'YES' AND department = '$hod_department'";
+        $query = "SELECT * FROM students WHERE appr_by_hod = 'YES' AND appr_by_dept_offc = 'YES' AND claimed='YES' AND department = ?";
         break;
     case 'pending':
-        $query = "SELECT * FROM students WHERE appr_by_fac_adv = 'YES' AND appr_by_hod = 'NO' AND department = '$hod_department'";
+        $query = "SELECT * FROM students WHERE appr_by_hod = 'NO' AND appr_by_dept_offc = 'YES' AND claimed='YES' AND department = ?";
         break;
     case 'rejected':
-        $query = "SELECT * FROM students WHERE appr_by_fac_adv = 'YES' AND appr_by_hod = 'REJECTED' AND department = '$hod_department'";
+        $query = "SELECT * FROM students WHERE appr_by_hod = 'REJECTED' AND appr_by_dept_offc = 'YES' AND claimed='YES' AND department = ?";
         break;
     case 'phd':
-        $query = "SELECT * FROM students WHERE appr_by_fac_adv = 'YES' AND course = 'phd' AND department = '$hod_department'";
+        $query = "SELECT * FROM students WHERE application_sent = 'YES' AND course = 'phd' AND appr_by_dept_offc = 'YES' AND claimed='YES' AND department = ?";
         break;
     case 'mtech':
-        $query = "SELECT * FROM students WHERE appr_by_fac_adv = 'YES' AND course = 'mtech' AND department = '$hod_department'";
+        $query = "SELECT * FROM students WHERE application_sent = 'YES' AND course = 'mtech' AND appr_by_dept_offc = 'YES' AND claimed='YES' AND department = ?";
         break;
     default:
-        $query = "SELECT * FROM students WHERE appr_by_fac_adv = 'YES' AND department = '$hod_department'";
+        $query = "SELECT * FROM students WHERE appr_by_dept_offc = 'YES' AND claimed='YES' AND department = ?";
 }
 
-// Fetch approved students' data for HOD
-$result = $conn->query($query);
+// Fetch student data for the hod's department and guide name
+$stmt_students = $conn->prepare($query);
+$stmt_students->bind_param("s", $department);
+$stmt_students->execute();
+$result_students = $stmt_students->get_result();
 
-// Fetch HOD's name
-$hod_name_query = "SELECT name FROM employees WHERE employee_id = '$employee_id'";
-$hod_name_result = $conn->query($hod_name_query);
-$hod_name_row = $hod_name_result->fetch_assoc();
-$hod_name = $hod_name_row['name'];
 ?>
 
 <!DOCTYPE html>
@@ -64,8 +70,8 @@ $hod_name = $hod_name_row['name'];
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Head of Department</title>
-    <link rel="icon" href="images/iitp_symbol.png" type="image/png">
+    <title>HOD Dashboard</title>
+    <link rel="icon" href="/images/iitp_symbol.png" type="image/png">
 
     <style>
         div.header {
@@ -166,7 +172,7 @@ $hod_name = $hod_name_row['name'];
             border-collapse: collapse;
             width: 100%;
             max-width: 1200px;
-            margin-left: 190px;
+
         }
 
         tr:nth-child(even) {
@@ -201,40 +207,57 @@ $hod_name = $hod_name_row['name'];
         ul.status li.active {
             background-color: #1f94ca;
         }
-    </style>
 
+        #stud_details {
+            display: inline-block;
+            text-decoration: none;
+            color: white;
+            padding: 6px 12px;
+            background-color: #1f94ca;
+
+            margin-bottom: 10px;
+
+        }
+    </style>
 </head>
 
 <body>
 
     <div class="header">
         <div style="align-self: center; margin:5px; width: 100px;">
-            <img style="height: 90px; width: 90px;" src="images/iitp_symbol.png">
+            <img style="height: 90px; width: 90px;" src="/images/iitp_symbol.png">
         </div>
         <div style="width: 100%; margin-left: 100px; text-align: center;">
             <h1 style="font-size: 35px; color: white;">Student Fellowship Portal</h1>
         </div>
     </div>
 
+    <div class="header">
+        <!-- Omitted for brevity -->
+    </div>
+
     <div id="main">
         <div>
             <ul class="navbar">
-                <li><a href="hod_profile.php">Profile</a></li>
+                <li><a href="/start.php">Profile</a></li>
+
+                <!-- Dropdown for Students -->
                 <li class="dropdown">
-                    <a href="hod.php">Students</a>
+                    <a href="javascript:void(0)">Students</a>
                     <div class="dropdown-content">
-                        <a href="hod.php?filter=phd">Phd</a> <!-- Phd filter based on the course column -->
-                        <a href="hod.php?filter=mtech">MTech</a> <!-- MTech filter based on the course column -->
+                        <a href="hod.php?filter=phd">PhD</a>
+                        <a href="hod.php?filter=mtech">MTech</a>
                     </div>
                 </li>
-                <li><a href="logout.php">Logout</a></li>
+
+                <li><a href="hod_login.php">Logout</a></li>
                 <hr>
             </ul>
         </div>
 
         <div id="status_table">
             <div>
-                <h2>Welcome, <?php echo $hod_name; ?>!</h2> <!-- HOD's name displayed here -->
+                <h2>Welcome <?php echo $hod_name; ?></h2>
             </div>
             <div style="text-align: center; margin-top: 0px;">
                 <h1>Applications</h1>
@@ -259,60 +282,108 @@ $hod_name = $hod_name_row['name'];
                 </script>
             </div>
 
-
+            <!-- Conditional rendering based on the filter -->
+            <?php if ($filter !== 'all') : ?>
+                <div style="text-align: center; margin: 10px;">
+                    <!-- Bulk Approval Controls -->
+                    <input type="checkbox" id="select_all" style="margin-right: 10px;">
+                    <select id="bulk_action">
+                        <option value="">Bulk Action</option>
+                        <option value="YES">Approve All</option>
+                        <option value="REJECTED">Reject All</option>
+                    </select>
+                    <button onclick="submitBulkApproval()">Submit</button>
+                </div>
+            <?php endif; ?>
 
             <div style="overflow-x: auto; margin: 10px;">
-                <table id="t4">
-                    <tr>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Gender</th>
-                        <th>Roll No</th>
-                        <th>Webmail</th>
-                        <th>Year</th>
-                        <th>Course</th>
-                        <th>Department</th>
-                        <th>Guide</th>
-                        <th>Account</th>
-                        <th>Bank</th>
-                        <th>IFSC</th>
-                        <th>DOJ</th>
-                        <th>Faculty Advisor Remarks</th> <!-- Faculty Advisor Remarks -->
-                        <th>Approve</th>
-
-                    </tr>
-                    <?php while ($row = $result->fetch_assoc()) { ?>
+                <form id="bulk_approval_form" action="hod_approve.php" method="post">
+                    <table id="t4">
                         <tr>
-                            <td><?php echo $row['fname']; ?></td>
-                            <td><?php echo $row['lname']; ?></td>
-                            <td><?php echo $row['gender']; ?></td>
-                            <td><?php echo $row['rollno']; ?></td>
-                            <td><?php echo $row['webmail']; ?></td>
-                            <td><?php echo $row['year']; ?></td>
-                            <td><?php echo $row['course']; ?></td>
-                            <td><?php echo $row['department']; ?></td>
-                            <td><?php echo $row['employee_name']; ?></td>
-                            <td><?php echo $row['account']; ?></td>
-                            <td><?php echo $row['bank']; ?></td>
-                            <td><?php echo $row['ifsc']; ?></td>
-                            <td><?php echo $row['doj']; ?></td>
-                            <td><?php echo $row['fac_adv_remarks']; ?></td>
-                            <td>
-                                <form action="hod_approve.php" method="post">
-                                    <input type="hidden" name="rollno" value="<?php echo $row['rollno']; ?>">
-                                    <select name="approval_status">
-                                        <option value="YES" selected<?php if ($row['appr_by_hod'] == 'YES') echo 'selected'; ?>>Approve</option>
-                                        <option value="REJECTED" <?php if ($row['appr_by_hod'] == 'REJECTED'); ?>>Reject</option>
-                                    </select>
-                                    <br>
-                                    <textarea name="hod_remarks" placeholder="Enter your remarks"></textarea>
-                                    <input type="submit" value="Submit">
-                                </form>
-                            </td>
+                            <?php if ($filter !== 'all') : ?>
+                                <th>Select</th>
+                            <?php endif; ?>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Roll No</th>
+                            <th>Year</th>
+                            <th>Course</th>
+                            <th>Department</th>
+                            <th>Guide</th>
+                            <th>Claimed Date</th>
+                            <th>Claimed Amount</th>
+                            <th>Approval</th>
                         </tr>
-                    <?php } ?>
-                </table>
+                        <?php while ($row = $result_students->fetch_assoc()) : ?>
+                            <tr>
+                                <?php if ($filter !== 'all') : ?>
+                                    <td>
+                                        <input type="checkbox" class="select_student" name="selected_students[]" value="<?php echo $row['rollno']; ?>">
+                                    </td>
+                                <?php endif; ?>
+                                <td><?php echo $row['fname']; ?></td>
+                                <td><?php echo $row['lname']; ?></td>
+                                <td><?php echo $row['rollno']; ?></td>
+                                <td><?php echo $row['year']; ?></td>
+                                <td><?php echo $row['course']; ?></td>
+                                <td><?php echo $row['department']; ?></td>
+                                <td><?php echo $row['employee_name']; ?></td>
+                                <td>
+                                    <?php
+                                    if (!empty($row['claimed_month'])) {
+                                        $date = new DateTime($row['claimed_month']);
+                                        echo $date->format('M Y');
+                                    } else {
+                                        echo "No date provided";
+                                    }
+                                    ?>
+                                </td>
+                                <td><?php echo $row['claimed_amount']; ?></td>
+                                <td>
+                                    <a id="stud_details" href="student_details.php?rollno=<?php echo $row['rollno']; ?>" target="_blank">View Full Details</a><br>
+
+                                    <?php if ($filter === 'all') : ?>
+                                        <input style="width:80px " type="text" value="<?php echo ($row['appr_by_hod'] == 'YES') ? 'Approved' : (($row['appr_by_hod'] == 'REJECTED') ? 'Rejected' : 'Pending'); ?>" readonly>
+                                    <?php else : ?>
+                                        <select name="approval_status[<?php echo $row['rollno']; ?>]">
+                                            <option value="YES" <?php if ($row['appr_by_hod'] == 'YES') echo 'selected'; ?>>Approve</option>
+                                            <option value="REJECTED" <?php if ($row['appr_by_hod'] == 'REJECTED') echo 'selected'; ?>>Reject</option>
+                                        </select>
+                                    <?php endif; ?>
+
+                                    <textarea name="hod_remarks[<?php echo $row['rollno']; ?>]" placeholder="Enter your remarks" <?php echo ($filter === 'all') ? 'readonly' : ''; ?>><?php echo htmlspecialchars($row['hod_offc_remarks']); ?></textarea>
+                                </td>
+                            </tr>
+                        <?php endwhile; ?>
+                    </table>
+                </form>
             </div>
+
+            <script>
+                // Select all students
+                document.getElementById('select_all')?.addEventListener('change', function() {
+                    const checkboxes = document.querySelectorAll('.select_student');
+                    checkboxes.forEach(checkbox => checkbox.checked = this.checked);
+                });
+
+                // Handle bulk action dropdown
+                document.getElementById('bulk_action')?.addEventListener('change', function() {
+                    const approvalStatus = this.value;
+                    document.querySelectorAll('.select_student:checked').forEach(checkbox => {
+                        const rollno = checkbox.value;
+                        document.querySelector(`[name="approval_status[${rollno}]"]`).value = approvalStatus;
+                    });
+                });
+
+                // Submit bulk approval form
+                function submitBulkApproval() {
+                    // Filter out unchecked entries
+                    document.querySelectorAll('.select_student:not(:checked)').forEach(checkbox => {
+                        checkbox.closest('tr').querySelectorAll('select, textarea').forEach(input => input.disabled = true);
+                    });
+                    document.getElementById('bulk_approval_form').submit();
+                }
+            </script>
         </div>
     </div>
 

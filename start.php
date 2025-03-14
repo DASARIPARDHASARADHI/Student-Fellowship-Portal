@@ -4,12 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Start</title>
+    <title>Student Fellowship Portal</title>
     <link rel="icon" href="images/iitp_symbol.png" type="image/png">
 
     <style>
         body {
-            background-color: #1f94ca;
+            background-color: rgb(8, 73, 105);
 
             background-repeat: no-repeat;
             margin: 5px;
@@ -30,15 +30,16 @@
             display: block;
 
             margin: 60px auto;
+            border: rgb(190, 202, 207) solid 5px;
 
         }
 
-        #div1 {
+        /* #div1 {
             margin: auto;
             width: 600px;
             height: 50px;
             border: solid;
-        }
+        } */
 
 
 
@@ -67,14 +68,17 @@
         ul {
 
             list-style-type: none;
-            width: 600px;
+            width: 1000px;
             margin: auto;
+            margin-left: 130px;
+            margin-top: -10px;
         }
 
         li {
             display: inline-block;
             margin: 15px 15px 0 15px;
-            font-weight: bold;
+            font-size: large;
+
 
         }
 
@@ -87,22 +91,21 @@
             text-decoration: none;
 
 
-            background-color: #860880;
+            background-color: rgb(17, 126, 41);
             color: white;
 
-            border-radius: 3px;
-            border: solid #860880 2px;
+            border: rgb(211, 222, 228) solid 2px;
 
         }
 
         li a:hover,
         li a:active {
 
-            padding: 11px 19px;
+            /* padding: 11px 19px; */
 
-            border: solid #5e0459 2px;
+            border: rgb(211, 222, 228) solid 2px;
 
-            background-color: #5e0459;
+            background-color: rgb(20, 175, 54);
 
 
 
@@ -141,10 +144,11 @@
         <div id="main">
             <div>
                 <ul>
-                    <li><a href="stud_login.php" target="_blank"> Student</a></li>
-                    <li><a href="fac_adv_login.php" target="_blank"> Faculty</a></li>
-                    <li><a href="hod_login.php" target="_blank"> HOD</a></li>
-                    <li><a href="start.php" target="_blank"> Administration</a></li>
+                    <li style="margin-left:130px"><a href="\Student\stud_login.php" target="_blank"> Student</a></li>
+                    <li><a href="\Supervisor\supervisor_login.php" target="_blank"> Supervisor</a></li>
+                    <li><a href="\Faculty_Advisor\fac_adv_login.php" target="_blank"> Faculty Advisor</a></li>
+                    <li><a href="\Department_Office\dept_offc_login.php" target="_blank"> Department Office</a></li>
+                    <li><a href="\HOD\hod_login.php" target="_blank"> HOD</a></li>
 
                 </ul>
             </div>

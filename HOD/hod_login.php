@@ -1,11 +1,66 @@
+<?php
+// Database configuration
+$servername = "localhost";
+$username = "root";
+$password = "pardhu14225"; // Update to your MySQL password
+$dbname = "fellowship_portal";
+
+// Create a connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check the connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Check if the form is submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $webmail = $conn->real_escape_string($_POST['webmail']);
+    $pwd = $conn->real_escape_string($_POST['pwd']); // No need to hash since it's plain text
+
+    // Fetch employee details from the database
+    $sql = "SELECT * FROM employees WHERE webmail = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $webmail);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+
+        // Directly compare the password (since it's stored as plain text)
+        if ($pwd === $row['hod_password'] && $row['hod'] == 'YES') {
+            // Password is correct, start session and redirect to hod.php
+            session_start();
+            $_SESSION['webmail'] = $row['webmail'];
+            $_SESSION['name'] = $row['name']; // Assuming the employee name is stored
+            header("Location: hod.php");
+            exit();
+        } else {
+
+            $error_message = "Invalid username or password. Please try again.";
+        }
+    } else {
+        $error_message = "Invalid username or password. Please try again.";
+    }
+}
+
+// Close the connection
+$conn->close();
+
+?>
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Head of the Department Login</title>
-    <link rel="icon" href="images/iitp_symbol.png" type="image/png">
+    <title>HOD Login</title>
+    <link rel="icon" href="/images/iitp_symbol.png" type="image/png">
     <style>
         body {
             background-color: #1f94ca;
@@ -116,17 +171,17 @@
 <body>
 
     <div class="heading-container">
-        <img src="images/iitp_symbol.png" alt="IITP Symbol">
+        <img src="/images/iitp_symbol.png" alt="IITP Symbol">
         <h1 style="color: white;">Student Fellowship Portal</h1>
     </div>
 
-    <h2 style="color: white; font-size: 25px;">Head of the Department Login</h2>
+    <h2 style="color: white; font-size: 25px;">HOD Login</h2>
 
     <div id="container">
-        <form id="registrationForm" action="hod_login_conn.php" method="POST">
+        <form id="registrationForm" action="hod_login.php" method="POST">
             <div class="form-group">
-                <label for="employee_id">HOD ID </label>
-                <input type="text" id="employee_id" name="employee_id" autofocus required size="35" placeholder="Employee ID">
+                <label for="webmail">Username </label>
+                <input type="text" id="webmail" name="webmail" autofocus required size="35" placeholder="Username">
             </div>
 
             <div class="form-group">
@@ -135,14 +190,30 @@
             </div>
 
 
+
             <div>
                 <input type="submit" value="Login">
             </div>
-            <!-- <div>
-                <p>Didn't Register Yet! <a href="register.html"
-                        style="text-decoration: none; font-weight: bold; color: #0d1eb4;" target="_blank">Register
-                        Here</a></p>
-            </div> -->
+
+            <div id="error-message" class="err" style="display: none; color: red; font-weight: bold;"></div>
+            <script>
+                // Get the error message from PHP (only if login failed)
+                let errorMessage = <?php echo json_encode($error_message); ?>;
+
+                // Reference to the error message div
+                let errorDiv = document.getElementById("error-message");
+
+                // Display error message only if login failed
+                if (errorMessage && errorMessage !== "") {
+                    errorDiv.innerHTML = errorMessage;
+                    errorDiv.style.display = "block";
+
+                    // Set a timer to hide the message after 3 seconds (3000ms)
+                    setTimeout(function() {
+                        errorDiv.style.display = "none";
+                    }, 3000);
+                }
+            </script>
         </form>
 
     </div>

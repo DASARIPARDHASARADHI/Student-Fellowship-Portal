@@ -25,7 +25,7 @@ if (!isset($_SESSION['logged_in_user'])) {
 // Fetch student details based on logged-in username
 $uname = $_SESSION['logged_in_user'];
 
-$stmt = $conn->prepare("SELECT * FROM students WHERE username = ?");
+$stmt = $conn->prepare("SELECT * FROM students WHERE webmail = ?");
 $stmt->bind_param("s", $uname);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -45,10 +45,10 @@ $conn->close();
     <link rel="icon" href="iitp_symbol.png" type="image/png">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            /* font-family: Arial, sans-serif; */
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            background-color: #dde8eb;
         }
 
         .header {
@@ -170,15 +170,15 @@ $conn->close();
 
             if (course === 'phd' && enhancement === 'YES') {
                 claimedAmountSelect.innerHTML = `
-                    <option value="42,000">Rs. 42,000</option>
+                    <option value="42000">Rs. 42000</option>
                 `;
             } else if (course === 'mtech') {
                 claimedAmountSelect.innerHTML = `
-                    <option value="12,000">Rs. 12,000</option>
+                    <option value="12000">Rs. 12000</option>
                 `;
             } else {
                 claimedAmountSelect.innerHTML = `
-                    <option value="37,000">Rs. 37,000</option>
+                    <option value="37000">Rs. 37000</option>
                 `;
             }
         }
@@ -194,11 +194,15 @@ $conn->close();
     <div class="header">
         <img src="iitp_symbol.png" alt="Logo">
         <h1>Student Fellowship Portal</h1>
+
     </div>
 
     <div class="container">
         <div class="student-details">
             <h2>Welcome, <?php echo $student['fname'] . ' ' . $student['lname']; ?>!</h2>
+            <div class="logout" style="display:inline-block; margin:auto; margin-bottom: 30px;">
+                <a href="student_profile_edit.php" style="background-color: #07823a;" target="_blank">Edit Details</a>
+            </div>
 
             <!-- Readonly Details Form -->
             <form>
@@ -265,22 +269,37 @@ $conn->close();
                 <h2 style="color:brown">Claim The Fellowship</h2>
 
                 <div class="form-group">
-                    <label for="claimed_month">Claimed Month</label>
-                    <select id="claimed_month" name="claimed_month" required>
-                        <option value="">--Select Month--</option>
-                        <option value="January">January</option>
-                        <option value="February">February</option>
-                        <option value="March">March</option>
-                        <option value="April">April</option>
-                        <option value="May">May</option>
-                        <option value="June">June</option>
-                        <option value="July">July</option>
-                        <option value="August">August</option>
-                        <option value="September">September</option>
-                        <option value="October">October</option>
-                        <option value="November">November</option>
-                        <option value="December">December</option>
-                    </select>
+                    <input type="hidden" id="rollno" value="<?php echo $student['rollno']; ?>">
+                    <label for="claimed_month">Claimed Month (With Full Date)</label>
+                    <input type="date" id="claimed_month" name="claimed_month" required>
+
+
+                    <script>
+                        let des = "You cannot claim now";
+
+                        let c = document.getElementById("claimed_month");
+
+                        function now() {
+                            const date = new Date();
+                            const year = date.getFullYear();
+                            const month = String(date.getMonth() + 1).padStart(2, '0'); // Ensure two digits
+                            const day = String(date.getDate()).padStart(2, '0'); // Ensure two digits
+
+                            let c = document.getElementById("claimed_month");
+
+                            if (day > 20) {
+                                c.readOnly = true;
+                                c.type = "text";
+
+                                return `You cannot claim now`;
+                                // c.innerHTML = "You cannot claim now";
+                            }
+
+                        }
+
+                        document.getElementById("claimed_month").value = now();
+                    </script>
+
                 </div>
                 <div class="form-group">
                     <label for="claimed_amount">Claimed Amount</label>
@@ -303,8 +322,22 @@ $conn->close();
                 </div>
 
                 <div class="form-group">
-                    <button type="submit" style="background-color: #1f94ca; color: white; padding: 10px; border: none; border-radius: 4px; cursor: pointer" onclick="return confirm('Are you sure to submit?')">Submit Claim</button>
+                    <label for="approved_amount">Approved Amount</label>
+                    <input type="text" id="approved_amount" name="approved_amount" disabled value="<?php echo $student["approved_amount"] ?>">
                 </div>
+
+                <div class="form-group" id="btn">
+                    <button type="submit" style="background-color: #07823a; color: white; padding: 10px; border: none; border-radius: 4px; cursor: pointer" onclick="return confirm('Are you sure to submit claim ?')">Submit Claim</button>
+                </div>
+
+                <script>
+                    if (document.getElementById("claimed_month").value == `${des}`) {
+                        let btn = document.getElementById("btn");
+                        btn.style.cssText = "display:none";
+                    } else {}
+                </script>
+
+                <!-- llll -->
             </form>
 
             <div class="logout">
