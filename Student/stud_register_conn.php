@@ -104,7 +104,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $mail->Host = "smtp.office365.com";
                 $mail->SMTPAuth = true;
                 $mail->Username = "dasari_2101cs22@iitp.ac.in"; // Your IITP Email (Sender)
-                $mail->Password = "Pardhu14225@s"; // Use App Password (Not normal password)
+                $mail->Password = ""; // Use App Password (Not normal password)
                 $mail->SMTPSecure = "tls";
                 $mail->Port = 587;
 
